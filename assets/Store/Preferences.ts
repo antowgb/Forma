@@ -1,5 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Equipment, Modality, UserPrefs } from "assets/Types";
+import {
+  Equipment,
+  Modality,
+  UserPrefs,
+  WorkoutDuration,
+} from "assets/Types";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -7,7 +12,7 @@ type PrefsStore = UserPrefs & {
   toggleFavorite: (id: string) => void;
   hideExercise: (id: string, hidden?: boolean) => void;
   setModality: (m: Modality) => void;
-  setDuration: (d: 60 | 90 | 120) => void;
+  setDuration: (d: WorkoutDuration) => void;
   setEquipment: (e: Equipment) => void;
 };
 
@@ -17,19 +22,19 @@ export const usePrefs = create<PrefsStore>()(
       modalityPref: "auto",
       favorites: {},
       hidden: {},
-      durationPref: 90, // 👈 ton choix
-      equipment: "gym", // 👈 ton choix
+      durationPref: 90,
+      equipment: "gym",
 
       toggleFavorite: (id) =>
-        set((s) => {
-          const fav = { ...s.favorites };
-          fav[id] ? delete fav[id] : (fav[id] = true);
-          return { favorites: fav };
+        set((state) => {
+          const favorites = { ...state.favorites };
+          favorites[id] ? delete favorites[id] : (favorites[id] = true);
+          return { favorites };
         }),
 
       hideExercise: (id, hidden = true) =>
-        set((s) => {
-          const next = { ...s.hidden };
+        set((state) => {
+          const next = { ...state.hidden };
           if (hidden) {
             next[id] = true;
           } else {
@@ -38,9 +43,9 @@ export const usePrefs = create<PrefsStore>()(
           return { hidden: next };
         }),
 
-      setModality: (m) => set({ modalityPref: m }),
-      setDuration: (d) => set({ durationPref: d }),
-      setEquipment: (e) => set({ equipment: e }),
+      setModality: (modalityPref) => set({ modalityPref }),
+      setDuration: (durationPref) => set({ durationPref }),
+      setEquipment: (equipment) => set({ equipment }),
     }),
     {
       name: "prefs-store",
