@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { generateWorkout } from "assets/GenerateWorkout";
@@ -50,7 +50,7 @@ export default function HomeScreen() {
                   duration === d && styles.durationTextActive,
                 ]}
               >
-                {d < 60 ? `${d} min` : `${d / 60} h`}
+                {`${d / 60} h`}
               </Text>
             </Pressable>
           ))}
