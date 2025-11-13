@@ -1,9 +1,10 @@
+import { COLORS } from "constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { generateWorkout } from "assets/GenerateWorkout";
+import { generateWorkout, generateReps } from "assets/GenerateWorkout";
 import { markMuscleWorked } from "assets/Recovery";
 
 export default function HomeScreen() {
@@ -22,6 +23,12 @@ export default function HomeScreen() {
     setWorkout([]);
     setNotice("Workout enregistré !");
   }
+
+  // 💡 Regroupement ultra simple
+  const simpleGroups = workout.reduce((acc: any, ex) => {
+    (acc[ex.muscle] ||= []).push(ex);
+    return acc;
+  }, {});
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -50,7 +57,7 @@ export default function HomeScreen() {
                   duration === d && styles.durationTextActive,
                 ]}
               >
-                {`${d / 60} h`}
+                {d < 60 ? `${d} min` : `${d / 60} h`}
               </Text>
             </Pressable>
           ))}
@@ -62,11 +69,22 @@ export default function HomeScreen() {
 
         {notice ? <Text style={styles.notice}>{notice}</Text> : null}
 
-        {workout.map((ex) => (
-          <Text key={ex.id} style={styles.item}>
-            {ex.name} — {ex.muscle}
-          </Text>
-        ))}
+        {/* Workout affiché par muscle */}
+        <View style={styles.exerciseList}>
+          <ScrollView>
+            {Object.entries(simpleGroups).map(([muscle, list]: any) => (
+              <View key={muscle} style={{ marginBottom: 14 }}>
+                <Text style={styles.muscleTitle}>{muscle}</Text>
+
+                {list.map((ex: any) => (
+                  <Text key={ex.id} style={styles.item}>
+                    • {ex.name} : {generateReps(ex)}
+                  </Text>
+                ))}
+              </View>
+            ))}
+          </ScrollView>
+        </View>
 
         {workout.length > 0 && (
           <Pressable style={styles.done} onPress={complete}>
@@ -79,34 +97,78 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 24, gap: 12 },
-  title: { color: "white", fontSize: 38, fontWeight: "800" },
-  row: { flexDirection: "row", gap: 10, marginVertical: 12 },
+  container: {
+    flex: 1,
+    padding: 24,
+    gap: 12,
+  },
+  title: {
+    color: COLORS.text,
+    fontSize: 38,
+    fontWeight: "800",
+  },
+  row: {
+    flexDirection: "row",
+    gap: 10,
+    marginVertical: 12,
+  },
   durationButton: {
     paddingVertical: 6,
     paddingHorizontal: 14,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#EF4444",
+    borderColor: COLORS.accent,
   },
   durationActive: {
-    backgroundColor: "#EF4444",
+    backgroundColor: COLORS.accent,
   },
-  durationText: { color: "white" },
-  durationTextActive: { color: "#0B0F12", fontWeight: "700" },
+  durationText: {
+    color: COLORS.text,
+  },
+  durationTextActive: {
+    color: COLORS.background,
+    fontWeight: "700",
+  },
   generate: {
     marginTop: 10,
-    backgroundColor: "#EF4444",
+    backgroundColor: COLORS.accent,
     borderRadius: 12,
     padding: 12,
     alignItems: "center",
   },
-  generateText: { color: "white", fontWeight: "700" },
-  notice: { color: "#aaa", marginTop: 10 },
-  item: { color: "#ddd", fontSize: 16, marginVertical: 2 },
-  done: {
-    backgroundColor: "#22C55E",
+  generateText: {
+    color: COLORS.text,
+    fontWeight: "700",
+  },
+  notice: {
+    color: COLORS.text,
+    marginTop: 10,
+  },
+  exerciseList: {
+    marginTop: 20,
+    maxHeight: 300,
+    borderWidth: 1,
+    borderColor: COLORS.accent,
+    borderRadius: 12,
     padding: 12,
+    backgroundColor: COLORS.panel + "50",
+  },
+  muscleTitle: {
+    color: COLORS.text,
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: 6,
+  },
+  item: {
+    color: COLORS.text,
+    fontSize: 16,
+    marginVertical: 2,
+  },
+  done: {
+    backgroundColor: COLORS.panel,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: COLORS.accent,
     borderRadius: 12,
     marginTop: 20,
     alignItems: "center",

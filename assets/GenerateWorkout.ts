@@ -1,10 +1,36 @@
 import { EXERCISES } from "assets/Exercises";
 import { isMuscleReady } from "assets/Recovery";
+import { Exercise } from "./Types";
 
 // modalité préférée (simple pour l’instant)
 export const userModality = "muscu"; // plus tard: réglage utilisateur
 
-// Algorithme intelligent (mais simple)
+// ---------------------------
+//  Génère les reps pour un exercice
+// ---------------------------
+export function generateReps(ex: Exercise) {
+  if (ex.muscle === "Core") {
+    return "3 × 30 sec";
+  }
+
+  if (ex.intensity === 3) {
+    return "4 × 8";
+  }
+
+  if (ex.modality === "calisthenics") {
+    return "3 × 12";
+  }
+
+  if (ex.modality === "muscu") {
+    return "3 × 10";
+  }
+
+  return "3 × 12";
+}
+
+// ---------------------------
+//  Algorithme intelligent
+// ---------------------------
 export function generateWorkout(durationMinutes: number) {
   // Étape 1 : noter les muscles prêts
   const readyMuscles = [
