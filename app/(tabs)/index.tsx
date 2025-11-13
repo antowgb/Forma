@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
   exerciseList: {
     marginTop: 20,
-    maxHeight: 400,
+    height: 300,
     borderWidth: 1,
     borderColor: COLORS.accent,
     borderRadius: 12,

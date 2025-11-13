@@ -61,17 +61,29 @@ export function generateWorkout(durationMinutes: number) {
   scored.sort((a, b) => b.score - a.score);
 
   // Étape 4 : remplir jusqu’à la durée demandée
-  const chosen: any[] = [];
+  // Étape 4 : remplir jusqu’à la durée demandée
+  const chosen: Exercise[] = [];
+  const usedMuscles: Set<string> = new Set(); // 👈 muscles déjà utilisés
   let total = 0;
 
   for (const { ex } of scored) {
     if (total + ex.estMinutes > durationMinutes) continue;
 
-    if (!noMuscleReady && !readyMuscles.includes(ex.muscle)) continue;
+    // Vérifier si on peut ajouter ce muscle
+    const muscle = ex.muscle;
 
+    // Si nouveau muscle mais on en a déjà 3 → on skip
+    if (!usedMuscles.has(muscle) && usedMuscles.size >= 3) continue;
+
+    // Si muscle pas prêt → skip (sauf fallback)
+    if (!noMuscleReady && !readyMuscles.includes(muscle)) continue;
+
+    // Ajouter l'exercice
     chosen.push(ex);
+    usedMuscles.add(muscle);
     total += ex.estMinutes;
 
+    // Arrêter si la durée est quasi remplie
     if (total >= durationMinutes - 5) break;
   }
 
