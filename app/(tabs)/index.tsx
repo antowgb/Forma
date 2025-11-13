@@ -1,34 +1,38 @@
+import { Exercise } from "assets/Types";
 import { COLORS } from "constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
-import { Pressable, StyleSheet, Text, View, ScrollView } from "react-native";
+import { useEffect, useState } from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { generateWorkout, generateReps } from "assets/GenerateWorkout";
+import { generateReps, getDailyWorkout } from "assets/GenerateWorkout";
+
 import { markMuscleWorked } from "assets/Recovery";
 
 export default function HomeScreen() {
   const [duration, setDuration] = useState(90);
-  const [workout, setWorkout] = useState<any[]>([]);
+  const [workout, setWorkout] = useState<Exercise[]>([]);
   const [notice, setNotice] = useState("");
 
   function onGenerate() {
-    const result = generateWorkout(duration);
+    const result = getDailyWorkout(duration); // 👈 au lieu de generateWorkout
     setWorkout(result.exercises);
     setNotice(result.notice);
   }
 
   function complete() {
     workout.forEach((ex) => markMuscleWorked(ex.muscle));
-    setWorkout([]);
     setNotice("Workout enregistré !");
   }
 
-  // 💡 Regroupement ultra simple
-  const simpleGroups = workout.reduce((acc: any, ex) => {
+  const simpleGroups = workout.reduce((acc: Record<string, Exercise[]>, ex) => {
     (acc[ex.muscle] ||= []).push(ex);
     return acc;
   }, {});
+
+  useEffect(() => {
+    onGenerate();
+  }, [duration]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -57,18 +61,18 @@ export default function HomeScreen() {
                   duration === d && styles.durationTextActive,
                 ]}
               >
-                {d < 60 ? `${d} min` : `${d / 60} h`}
+                {d} min
               </Text>
             </Pressable>
           ))}
         </View>
 
-        <Pressable style={styles.generate} onPress={onGenerate}>
-          <Text style={styles.generateText}>Generate workout</Text>
-        </Pressable>
-
+        {workout.length > 0 && (
+          <Pressable style={styles.done} onPress={complete}>
+            <Text style={styles.generateText}>Mark Completed</Text>
+          </Pressable>
+        )}
         {notice ? <Text style={styles.notice}>{notice}</Text> : null}
-
         {/* Workout affiché par muscle */}
         <View style={styles.exerciseList}>
           <ScrollView>
@@ -78,19 +82,13 @@ export default function HomeScreen() {
 
                 {list.map((ex: any) => (
                   <Text key={ex.id} style={styles.item}>
-                    • {ex.name} : {generateReps(ex)}
+                    {ex.name} : {generateReps(ex)}
                   </Text>
                 ))}
               </View>
             ))}
           </ScrollView>
         </View>
-
-        {workout.length > 0 && (
-          <Pressable style={styles.done} onPress={complete}>
-            <Text style={styles.generateText}>Mark Completed</Text>
-          </Pressable>
-        )}
       </View>
     </SafeAreaView>
   );
@@ -109,15 +107,16 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
-    gap: 10,
+    justifyContent: "space-between",
     marginVertical: 12,
   },
   durationButton: {
     paddingVertical: 6,
-    paddingHorizontal: 14,
+    paddingHorizontal: 10,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: COLORS.accent,
+    backgroundColor: COLORS.panel + "50",
   },
   durationActive: {
     backgroundColor: COLORS.accent,
@@ -142,11 +141,14 @@ const styles = StyleSheet.create({
   },
   notice: {
     color: COLORS.text,
+    fontSize: 20,
     marginTop: 10,
+    fontWeight: "600",
+    textAlign: "center",
   },
   exerciseList: {
     marginTop: 20,
-    maxHeight: 300,
+    maxHeight: 400,
     borderWidth: 1,
     borderColor: COLORS.accent,
     borderRadius: 12,
@@ -165,12 +167,10 @@ const styles = StyleSheet.create({
     marginVertical: 2,
   },
   done: {
-    backgroundColor: COLORS.panel,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: COLORS.accent,
+    marginTop: 10,
+    backgroundColor: COLORS.accent,
     borderRadius: 12,
-    marginTop: 20,
+    padding: 12,
     alignItems: "center",
   },
 });

@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function ModalScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>This is a modal</Text>
+      <Text style={styles.title}>Workouts</Text>
       <Link href="/" dismissTo style={styles.link}>
         <Text style={styles.linkText}>Go to home screen</Text>
       </Link>
