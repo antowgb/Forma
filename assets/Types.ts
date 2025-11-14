@@ -1,5 +1,5 @@
 export type Muscle = "Chest" | "Back" | "Legs" | "Shoulders" | "Arms" | "Core";
-export type Modality = "muscu" | "calisthenics" | "auto";
+export type Modality = "weight lifting" | "calisthenics" | "auto";
 export type Equipment = "none" | "basic" | "gym";
 export type WorkoutDuration = 30 | 60 | 90 | 120;
 

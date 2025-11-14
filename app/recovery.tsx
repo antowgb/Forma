@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
@@ -82,16 +83,17 @@ export default function RecoveryScreen() {
       />
 
       <View style={styles.container}>
-        <Text style={styles.title}>Recovery</Text>
-        <Text style={styles.subtitle}>Based on your last workouts</Text>
+        <View style={styles.headerTop}>
+          <Text style={styles.title}>Recovery</Text>
 
-        {/* Reset Recovery Button */}
-        <Pressable
-          style={[styles.debugButton, { backgroundColor: "#5a2a2a" }]}
-          onPress={onReset}
-        >
-          <Text style={styles.debugText}>Reset Recovery</Text>
-        </Pressable>
+          {/* Reset Recovery Button */}
+          <Pressable
+            style={[styles.reloadButton, { alignSelf: "flex-start" }]}
+            onPress={onReset}
+          >
+            <Ionicons name="reload" size={24} color="black" />
+          </Pressable>
+        </View>
 
         <View style={styles.card}>
           <ScrollView>
@@ -156,22 +158,20 @@ const styles = StyleSheet.create({
     padding: 24,
     gap: 12,
   },
+  headerTop: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   title: {
     color: COLORS.text,
-    fontSize: 32,
+    fontSize: 38,
     fontWeight: "800",
   },
-  subtitle: {
-    color: COLORS.subtext,
-    fontSize: 14,
-    marginBottom: 8,
-  },
-  debugButton: {
-    padding: 10,
-    borderRadius: 10,
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: COLORS.accent,
+  reloadButton: {
+    padding: 8,
+    borderRadius: 999,
+    backgroundColor: COLORS.accent,
   },
   debugText: {
     color: COLORS.text,

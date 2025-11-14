@@ -11,7 +11,7 @@ import { Exercise } from "assets/Types";
 import { COLORS } from "constants/Colors";
 
 const MUSCLES = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core"] as const;
-type FilterMode = "all" | "gym" | "calisthenics";
+type FilterMode = "all" | "weight lifting" | "calisthenics";
 
 export default function WorkoutsScreen() {
   const [filter, setFilter] = useState<FilterMode>("all");
@@ -32,7 +32,7 @@ export default function WorkoutsScreen() {
   const filtered = useMemo(() => {
     return EXERCISES.filter((ex) => {
       if (filter === "all") return true;
-      if (filter === "gym") return ex.modality === "muscu";
+      if (filter === "weight lifting") return ex.modality === "weight lifting";
       if (filter === "calisthenics")
         return ex.modality === "calisthenics" || ex.modality === "both";
       return true;
@@ -58,30 +58,31 @@ export default function WorkoutsScreen() {
 
       <View style={styles.container}>
         <Text style={styles.title}>Workouts</Text>
-        <Text style={styles.subtitle}>Browse and favorite exercises</Text>
 
         {/* Filtres */}
         <View style={styles.filters}>
-          {(["all", "gym", "calisthenics"] as FilterMode[]).map((mode) => (
-            <Pressable
-              key={mode}
-              onPress={() => setFilter(mode)}
-              style={[styles.chip, filter === mode && styles.chipActive]}
-            >
-              <Text
-                style={[
-                  styles.chipText,
-                  filter === mode && styles.chipTextActive,
-                ]}
+          {(["all", "weight lifting", "calisthenics"] as FilterMode[]).map(
+            (mode) => (
+              <Pressable
+                key={mode}
+                onPress={() => setFilter(mode)}
+                style={[styles.chip, filter === mode && styles.chipActive]}
               >
-                {mode === "all"
-                  ? "All"
-                  : mode === "gym"
-                  ? "Gym"
-                  : "Calisthenics"}
-              </Text>
-            </Pressable>
-          ))}
+                <Text
+                  style={[
+                    styles.chipText,
+                    filter === mode && styles.chipTextActive,
+                  ]}
+                >
+                  {mode === "all"
+                    ? "All"
+                    : mode === "weight lifting"
+                    ? "Weight Lifting"
+                    : "Calisthenics"}
+                </Text>
+              </Pressable>
+            )
+          )}
         </View>
 
         {/* Liste des exercices */}
@@ -149,13 +150,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: COLORS.text,
-    fontSize: 32,
+    fontSize: 38,
     fontWeight: "800",
-  },
-  subtitle: {
-    color: COLORS.subtext,
-    fontSize: 14,
-    marginBottom: 8,
   },
   filters: {
     flexDirection: "row",

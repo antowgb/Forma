@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { Ionicons } from "@expo/vector-icons";
 import { generateReps, getDailyWorkout } from "assets/GenerateWorkout";
 
 import { loadRecovery, markMuscleWorked } from "assets/Recovery";
@@ -70,14 +71,16 @@ export default function HomeScreen() {
       />
 
       <View style={styles.container}>
-        <Text style={styles.title}>Forma</Text>
+        <View style={styles.headerTop}>
+          <Text style={styles.title}>Forma</Text>
 
-        <Pressable
-          style={[styles.debugButton, { backgroundColor: "#3a3a3a" }]}
-          onPress={() => onGenerate(true)}
-        >
-          <Text style={styles.debugText}>Regenerate</Text>
-        </Pressable>
+          <Pressable
+            style={[styles.reloadButton, { alignSelf: "flex-end" }]}
+            onPress={() => onGenerate(true)}
+          >
+            <Ionicons name="reload" size={24} color="black" />
+          </Pressable>
+        </View>
 
         {/* Choix durée */}
         <View style={styles.row}>
@@ -147,17 +150,20 @@ const styles = StyleSheet.create({
     padding: 24,
     gap: 12,
   },
+  headerTop: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   title: {
     color: COLORS.text,
     fontSize: 38,
     fontWeight: "800",
   },
-  debugButton: {
-    padding: 10,
-    borderRadius: 10,
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: COLORS.accent,
+  reloadButton: {
+    padding: 8,
+    borderRadius: 999,
+    backgroundColor: COLORS.accent,
   },
   debugText: {
     color: COLORS.text,
