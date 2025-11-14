@@ -138,7 +138,6 @@ const styles = StyleSheet.create({
     color: COLORS.text,
   },
   durationTextActive: {
-    color: COLORS.background,
     fontWeight: "700",
   },
   generate: {
