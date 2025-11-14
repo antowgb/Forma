@@ -1,84 +1,149 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Temps de repos (heures)
 export const RECOVERY_TIME: Record<string, number> = {
-  Chest: 36, // récup moyenne, adaptés aux novices
-  Back: 48, // gros groupe, mais pas besoin de 60h
-  Legs: 60, // gros groupe + DOMS fréquents
-  Shoulders: 36, // petite articulation
-  Arms: 30, // récup très rapide
-  Core: 24, // on peut travailler le core tous les jours
+  Chest: 36,
+  Back: 48,
+  Legs: 60,
+  Shoulders: 36,
+  Arms: 30,
+  Core: 24,
 };
 
-// Stockage interne en mémoire
-let lastWorked: Record<string, number> = {};
+type RecoveryEntry = {
+  start: number;
+  end: number;
+  multiplier: number;
+};
 
-const KEY = "recovery_last_worked";
+type RecoveryMap = Record<string, RecoveryEntry>;
 
-// ----------------------------
-// Charger depuis AsyncStorage
-// ----------------------------
+const STORAGE_KEY = "recovery_last_worked";
+const MS_PER_HOUR = 36e5;
+const DEFAULT_RECOVERY = 48;
+
+let recoveryMap: RecoveryMap = {};
+
+function requiredHours(muscle: string) {
+  return RECOVERY_TIME[muscle] ?? DEFAULT_RECOVERY;
+}
+
+function sessionMultiplier(exerciseCount: number) {
+  if (exerciseCount <= 2) return 0.5;
+  if (exerciseCount <= 4) return 1;
+  return 1.2;
+}
+
+function normalizeEntry(muscle: string, value: any): RecoveryEntry {
+  if (!value) {
+    return { start: 0, end: 0, multiplier: 1 };
+  }
+
+  if (
+    typeof value === "object" &&
+    value !== null &&
+    typeof value.start === "number" &&
+    typeof value.end === "number"
+  ) {
+    return {
+      start: value.start,
+      end: value.end,
+      multiplier: typeof value.multiplier === "number" ? value.multiplier : 1,
+    };
+  }
+
+  if (
+    typeof value === "object" &&
+    value !== null &&
+    typeof value.last === "number"
+  ) {
+    const multiplier =
+      typeof value.multiplier === "number" ? value.multiplier : 1;
+    const duration = requiredHours(muscle) * multiplier * MS_PER_HOUR;
+    const start = value.last;
+    return {
+      start,
+      end: start + duration,
+      multiplier,
+    };
+  }
+
+  if (typeof value === "number") {
+    return { start: value, end: value, multiplier: 1 };
+  }
+
+  return { start: 0, end: 0, multiplier: 1 };
+}
+
 export async function loadRecovery() {
   try {
-    const raw = await AsyncStorage.getItem(KEY);
+    const raw = await AsyncStorage.getItem(STORAGE_KEY);
     if (raw) {
-      lastWorked = JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      recoveryMap = Object.fromEntries(
+        Object.entries(parsed).map(([muscle, entry]) => [
+          muscle,
+          normalizeEntry(muscle, entry),
+        ])
+      );
     }
-  } catch (e) {
-    console.log("Error loading recovery:", e);
+  } catch (error) {
+    console.log("Error loading recovery:", error);
   }
-  return lastWorked;
+  return recoveryMap;
 }
 
-// Sauvegarde
 async function saveRecovery() {
   try {
-    await AsyncStorage.setItem(KEY, JSON.stringify(lastWorked));
-  } catch (e) {
-    console.log("Error saving recovery:", e);
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(recoveryMap));
+  } catch (error) {
+    console.log("Error saving recovery:", error);
   }
 }
 
-// ----------------------------
-// Vérifie si le muscle est prêt
-// ----------------------------
-export function isMuscleReady(muscle: string): boolean {
-  const last = lastWorked[muscle];
-  if (!last) return true;
+export function isMuscleReady(muscle: string) {
+  const entry = recoveryMap[muscle];
+  if (!entry) return true;
 
-  const hoursSince = (Date.now() - last) / 36e5;
-  const required = RECOVERY_TIME[muscle] ?? 48;
-
-  return hoursSince >= required;
+  return Date.now() >= entry.end;
 }
 
-// ----------------------------
-// Temps restant en heures
-// ----------------------------
-export function recoveryRemaining(muscle: string): number {
-  const last = lastWorked[muscle];
-  if (!last) return 0;
+export function recoveryRemaining(muscle: string) {
+  const entry = recoveryMap[muscle];
+  if (!entry) return 0;
 
-  const hoursSince = (Date.now() - last) / 36e5;
-  return Math.max(0, (RECOVERY_TIME[muscle] ?? 48) - hoursSince);
+  const remainingMs = entry.end - Date.now();
+  return Math.max(0, remainingMs / MS_PER_HOUR);
 }
 
-// ----------------------------
-// Marquer un muscle comme travaillé
-// ----------------------------
-export async function markMuscleWorked(muscle: string) {
-  lastWorked[muscle] = Date.now();
+export async function markMuscleWorked(
+  muscle: string,
+  exerciseCount: number = 1
+) {
+  const now = Date.now();
+  const multiplier = sessionMultiplier(exerciseCount);
+  const durationMs = requiredHours(muscle) * multiplier * MS_PER_HOUR;
+  const current = recoveryMap[muscle];
+
+  const hasCooldown = current && current.end > now;
+  const start = hasCooldown ? current.start : now;
+  const end = (hasCooldown ? current.end : now) + durationMs;
+
+  recoveryMap[muscle] = {
+    start,
+    end,
+    multiplier,
+  };
+
   await saveRecovery();
 }
 
-// Pour debug
 export function _getRecoveryMap() {
-  return lastWorked;
+  return recoveryMap;
 }
 
 export async function resetRecovery() {
-  Object.keys(RECOVERY_TIME).forEach((m) => {
-    lastWorked[m] = 0;
+  Object.keys(RECOVERY_TIME).forEach((muscle) => {
+    recoveryMap[muscle] = { start: 0, end: 0, multiplier: 1 };
   });
-  await AsyncStorage.setItem(KEY, JSON.stringify(lastWorked));
+  await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(recoveryMap));
 }

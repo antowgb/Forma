@@ -5,135 +5,227 @@ import { Exercise } from "./Types";
 
 const favs = getFavorites();
 
-// modalité préférée (simple pour l’instant)
-export const userModality = "muscu"; // plus tard: réglage utilisateur
+export const userModality = "muscu";
 
-// ---------------------------
-//  Génère les reps pour un exercice
-// ---------------------------
 export function generateReps(ex: Exercise) {
   if (ex.muscle === "Core") {
-    return "3 × 30 sec";
+    return "3 x 30 sec";
   }
 
   if (ex.intensity === 3) {
-    return "4 × 8";
+    return "4 x 8";
   }
 
   if (ex.modality === "calisthenics") {
-    return "3 × 12";
+    return "3 x 12";
   }
 
   if (ex.modality === "muscu") {
-    return "3 × 10";
+    return "3 x 10";
   }
 
-  return "3 × 12";
+  return "3 x 12";
 }
 
-// ---------------------------
-//  Algorithme intelligent
-// ---------------------------
+const MAX_MUSCLES_PER_WORKOUT = 3;
+const FULL_RECOVERY_NOTICE = "Rest recommended — all muscles are recovering";
+const NO_SLOT_NOTICE =
+  "Rest recommended — no slots available with current recovery";
+
+type ScoredExercise = { ex: Exercise; score: number };
+
 export function generateWorkout(durationMinutes: number) {
-  // Étape 1 : noter les muscles prêts
-  const readyMuscles = [
-    "Chest",
-    "Back",
-    "Legs",
-    "Shoulders",
-    "Arms",
-    "Core",
-  ].filter(isMuscleReady);
+  const readyMuscles = listReadyMuscles();
 
-  const noMuscleReady = readyMuscles.length === 0;
+  if (readyMuscles.length === 0) {
+    return { exercises: [], notice: FULL_RECOVERY_NOTICE };
+  }
 
-  // Étape 2 : attribuer un score à chaque exercice
-  const scored = EXERCISES.map((ex: Exercise) => {
-    // 👈 type ici
-    let s = 0;
-
-    if (readyMuscles.includes(ex.muscle)) s += 100;
-    if (ex.modality === userModality || ex.modality === "both") s += 20;
-    s += Math.max(0, 20 - ex.estMinutes);
-    // 4. Favoris → priorité très haute
-    if (favs[ex.id]) s += 80;
-
-    // 5. Bonus léger random (= variété)
-    s += Math.random() * 10;
-
-    return { ex, score: s };
-  });
-
-  // Étape 3 : trier par score
+  const readySet = new Set(readyMuscles);
+  const scored = scoreExercises(readySet);
   scored.sort((a, b) => b.score - a.score);
 
-  // Étape 4 : remplir jusqu’à la durée demandée
-  const chosen: Exercise[] = [];
-  const usedMuscles: Set<string> = new Set(); // 👈 muscles déjà utilisés
-  let total = 0;
+  const musclePools = buildMusclePools(scored, readySet);
+  const musclesToUse = selectMuscles(readyMuscles, musclePools);
+  const exercises = buildBalancedWorkout(
+    musclePools,
+    musclesToUse,
+    durationMinutes
+  );
 
-  for (const { ex } of scored) {
-    if (total + ex.estMinutes > durationMinutes) continue;
-
-    // Vérifier si on peut ajouter ce muscle
-    const muscle = ex.muscle;
-
-    // Si nouveau muscle mais on en a déjà 3 → on skip
-    if (!usedMuscles.has(muscle) && usedMuscles.size >= 3) continue;
-
-    // Si muscle pas prêt → skip (sauf fallback)
-    if (!noMuscleReady && !readyMuscles.includes(muscle)) continue;
-
-    // Ajouter l'exercice
-    chosen.push(ex);
-    usedMuscles.add(muscle);
-    total += ex.estMinutes;
-
-    // Arrêter si la durée est quasi remplie
-    if (total >= durationMinutes - 5) break;
+  if (exercises.length === 0) {
+    return { exercises: [], notice: NO_SLOT_NOTICE };
   }
 
-  // Fallback : rien n'est prêt → proposer le top 3
-  if (chosen.length === 0) {
-    return {
-      exercises: scored.slice(0, 3).map((x) => x.ex),
-      notice: "Repos conseillé — aucun muscle prêt",
-    };
-  }
-
-  return { exercises: chosen, notice: "" };
+  return { exercises, notice: "" };
 }
 
-// même type que le retour de generateWorkout
+function listReadyMuscles() {
+  const muscles = Array.from(new Set(EXERCISES.map((ex) => ex.muscle)));
+  return muscles.filter(isMuscleReady);
+}
+
+function scoreExercises(readySet: Set<string>): ScoredExercise[] {
+  return EXERCISES.map((ex) => ({
+    ex,
+    score: scoreExercise(ex, readySet),
+  }));
+}
+
+function scoreExercise(ex: Exercise, readySet: Set<string>) {
+  let score = 0;
+
+  if (readySet.has(ex.muscle)) score += 100;
+  if (ex.modality === userModality || ex.modality === "both") score += 20;
+  score += Math.max(0, 20 - ex.estMinutes);
+  if (favs[ex.id]) score += 80;
+  score += Math.random() * 10;
+
+  return score;
+}
+
+function buildMusclePools(scored: ScoredExercise[], readySet: Set<string>) {
+  const pools = new Map<string, ScoredExercise[]>();
+
+  for (const entry of scored) {
+    if (!readySet.has(entry.ex.muscle)) {
+      continue;
+    }
+
+    if (!pools.has(entry.ex.muscle)) {
+      pools.set(entry.ex.muscle, []);
+    }
+
+    pools.get(entry.ex.muscle)!.push(entry);
+  }
+
+  return pools;
+}
+
+function selectMuscles(
+  readyMuscles: string[],
+  pools: Map<string, ScoredExercise[]>
+) {
+  return readyMuscles
+    .map((muscle) => ({
+      muscle,
+      bestScore: pools.get(muscle)?.[0]?.score ?? -Infinity,
+    }))
+    .filter(({ bestScore }) => bestScore > -Infinity)
+    .sort((a, b) => b.bestScore - a.bestScore)
+    .slice(0, MAX_MUSCLES_PER_WORKOUT)
+    .map(({ muscle }) => muscle);
+}
+
+function buildBalancedWorkout(
+  pools: Map<string, ScoredExercise[]>,
+  muscles: string[],
+  durationMinutes: number
+) {
+  const counts = new Map<string, number>();
+  const active = new Set(
+    muscles.filter((muscle) => (pools.get(muscle)?.length ?? 0) > 0)
+  );
+  const chosen: Exercise[] = [];
+  let total = 0;
+
+  while (active.size > 0) {
+    const muscle = popNextMuscle(active, counts, pools);
+    if (!muscle) break;
+
+    const pool = pools.get(muscle);
+    if (!pool || pool.length === 0) continue;
+
+    const candidateIndex = findCandidateIndex(
+      pool,
+      total,
+      durationMinutes,
+      chosen.length === 0
+    );
+
+    if (candidateIndex === -1) {
+      pools.set(muscle, []);
+      continue;
+    }
+
+    const [{ ex }] = pool.splice(candidateIndex, 1);
+    chosen.push(ex);
+    total += ex.estMinutes;
+    counts.set(muscle, (counts.get(muscle) ?? 0) + 1);
+
+    if (pool.length > 0) {
+      active.add(muscle);
+    }
+
+    if (total >= durationMinutes - 5) {
+      break;
+    }
+  }
+
+  return chosen;
+}
+
+function popNextMuscle(
+  active: Set<string>,
+  counts: Map<string, number>,
+  pools: Map<string, ScoredExercise[]>
+) {
+  let next: string | null = null;
+  let lowestCount = Number.POSITIVE_INFINITY;
+  let bestScore = Number.NEGATIVE_INFINITY;
+
+  for (const muscle of active) {
+    const count = counts.get(muscle) ?? 0;
+    const score = pools.get(muscle)?.[0]?.score ?? -Infinity;
+
+    if (count < lowestCount || (count === lowestCount && score > bestScore)) {
+      next = muscle;
+      lowestCount = count;
+      bestScore = score;
+    }
+  }
+
+  if (next) {
+    active.delete(next);
+  }
+
+  return next;
+}
+
+function findCandidateIndex(
+  pool: ScoredExercise[],
+  total: number,
+  limit: number,
+  allowOverflow: boolean
+) {
+  return pool.findIndex(
+    ({ ex }) => allowOverflow || total + ex.estMinutes <= limit
+  );
+}
+
 type WorkoutResult = {
   exercises: Exercise[];
   notice: string;
 };
 
-// 🧠 petit cache en mémoire : clé = durée, valeur = (date + workout)
 const dailyCache: Record<number, { date: string; result: WorkoutResult }> = {};
 
-// retourne la date du jour au format "YYYY-MM-DD"
-function todayKey() { 
+function todayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
-// 👉 fonction à utiliser dans l'app
 export function getDailyWorkout(
   durationMinutes: number,
   forceNew: boolean = false
 ): WorkoutResult {
   const key = durationMinutes;
   const today = todayKey();
-
   const cached = dailyCache[key];
 
-  // si on NE force PAS et qu'on a un cache pour aujourd'hui → on le réutilise
   if (!forceNew && cached && cached.date === today) {
     return cached.result;
   }
 
-  // sinon on génère un nouveau workout et on écrase le cache du jour
   const result = generateWorkout(durationMinutes);
   dailyCache[key] = { date: today, result };
 

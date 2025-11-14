@@ -5,7 +5,6 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
-  RECOVERY_TIME,
   _getRecoveryMap,
   isMuscleReady,
   loadRecovery,
@@ -16,26 +15,39 @@ import { COLORS } from "constants/Colors";
 
 const MUSCLES = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core"];
 
-function computeRecovery(muscle: string) {
-  const base = RECOVERY_TIME[muscle] ?? 48;
-  const last = _getRecoveryMap()[muscle];
+type RecoveryInfo = {
+  ready: boolean;
+  progress: number;
+  hoursLeft: number;
+  multiplier: number;
+};
 
-  if (!last) {
+function computeRecovery(muscle: string): RecoveryInfo {
+  const entry = _getRecoveryMap()[muscle];
+  const multiplier = entry?.multiplier ?? 1;
+  const start = entry?.start ?? 0;
+  const end = entry?.end ?? 0;
+  const now = Date.now();
+
+  if (!start || !end || end <= now) {
     return {
       ready: true,
       progress: 1,
       hoursLeft: 0,
+      multiplier,
     };
   }
 
-  const hoursSince = (Date.now() - last) / 36e5;
-  const ratio = Math.min(hoursSince / base, 1);
-  const hoursLeft = Math.max(0, base - hoursSince);
+  const duration = Math.max(end - start, 1);
+  const elapsed = Math.min(Math.max(0, now - start), duration);
+  const progress = Math.min(1, elapsed / duration);
+  const hoursLeft = Math.max(0, (end - now) / 36e5);
 
   return {
     ready: isMuscleReady(muscle),
-    progress: ratio,
+    progress,
     hoursLeft,
+    multiplier,
   };
 }
 

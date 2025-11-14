@@ -35,7 +35,19 @@ export default function HomeScreen() {
 
   // 🔹 marquer comme complété (et sauvegarder la recovery)
   async function complete() {
-    await Promise.all(workout.map((ex) => markMuscleWorked(ex.muscle)));
+    const muscleCounts = workout.reduce(
+      (acc: Record<string, number>, ex: Exercise) => {
+        acc[ex.muscle] = (acc[ex.muscle] ?? 0) + 1;
+        return acc;
+      },
+      {}
+    );
+
+    await Promise.all(
+      Object.entries(muscleCounts).map(([muscle, count]) =>
+        markMuscleWorked(muscle, count)
+      )
+    );
 
     setNotice("Workout enregistré !");
 
