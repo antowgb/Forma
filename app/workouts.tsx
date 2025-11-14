@@ -66,7 +66,11 @@ export default function WorkoutsScreen() {
               <Pressable
                 key={mode}
                 onPress={() => setFilter(mode)}
-                style={[styles.chip, filter === mode && styles.chipActive]}
+                style={({ pressed }) => [
+                  styles.chip,
+                  filter === mode && styles.chipActive,
+                  pressed && styles.pressablePressed,
+                ]}
               >
                 <Text
                   style={[
@@ -109,7 +113,10 @@ export default function WorkoutsScreen() {
 
                         <Pressable
                           onPress={() => onToggle(ex.id)}
-                          style={styles.favoriteButton}
+                          style={({ pressed }) => [
+                            styles.favoriteButton,
+                            pressed && styles.pressablePressed,
+                          ]}
                         >
                           <Text style={styles.favoriteIcon}>
                             {isFav ? "★" : "☆"}
@@ -126,15 +133,31 @@ export default function WorkoutsScreen() {
 
         <View style={styles.row}>
           <Link href="/" asChild>
-            <Pressable style={styles.linkButton}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.linkButton,
+                pressed && styles.pressablePressed,
+              ]}
+            >
               <Text style={styles.linkText}>Home</Text>
             </Pressable>
           </Link>
           <Link href="/recovery" asChild>
-            <Pressable style={styles.linkButton}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.linkButton,
+                pressed && styles.pressablePressed,
+              ]}
+            >
               <Text style={styles.linkText}>Recovery</Text>
             </Pressable>
           </Link>
+        </View>
+
+        <View style={styles.bannerPlaceholder} pointerEvents="none">
+          <Text style={styles.bannerText}>
+            Reserved space for upcoming ad banner
+          </Text>
         </View>
       </View>
     </SafeAreaView>
@@ -142,11 +165,11 @@ export default function WorkoutsScreen() {
 }
 
 const styles = StyleSheet.create({
-  // (tes styles identiques)
   container: {
     flex: 1,
     padding: 24,
     gap: 12,
+    paddingBottom: 48,
   },
   title: {
     color: COLORS.text,
@@ -165,6 +188,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.accent,
     backgroundColor: COLORS.panel + "40",
+    shadowColor: COLORS.accent,
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 6,
   },
   chipActive: {
     backgroundColor: COLORS.accent,
@@ -179,12 +207,17 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    maxHeight: 350,
+    maxHeight: 400,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: COLORS.accent,
     backgroundColor: COLORS.panel + "55",
     padding: 16,
+    shadowColor: COLORS.accent,
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 12 },
+    elevation: 12,
   },
   muscleTitle: {
     color: COLORS.text,
@@ -209,6 +242,13 @@ const styles = StyleSheet.create({
   favoriteButton: {
     paddingHorizontal: 8,
     paddingVertical: 4,
+    borderRadius: 12,
+    backgroundColor: COLORS.panel + "30",
+    shadowColor: COLORS.accent,
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 8,
   },
   favoriteIcon: {
     color: COLORS.accent,
@@ -222,14 +262,46 @@ const styles = StyleSheet.create({
   linkButton: {
     width: "48%",
     marginTop: 10,
-    backgroundColor: COLORS.accent,
+    backgroundColor: "transparent",
     borderRadius: 12,
-    padding: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
     alignItems: "center",
+    justifyContent: "center",
+    shadowColor: COLORS.accent,
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 6,
+    borderWidth: 2,
+    borderColor: COLORS.accent,
   },
   linkText: {
     fontSize: 20,
-    color: COLORS.text,
+    color: COLORS.accent,
     fontWeight: "700",
+    letterSpacing: 0.8,
+    textTransform: "uppercase",
+  },
+  pressablePressed: {
+    transform: [{ scale: 0.97 }],
+    opacity: 0.85,
+  },
+  bannerPlaceholder: {
+    marginTop: 14,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderStyle: "dashed",
+    borderColor: COLORS.accent,
+    paddingVertical: 18,
+    paddingHorizontal: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: COLORS.panel + "40",
+  },
+  bannerText: {
+    color: COLORS.text + "99",
+    fontSize: 14,
+    letterSpacing: 0.6,
   },
 });

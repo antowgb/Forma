@@ -5,7 +5,7 @@ import { Exercise } from "./Types";
 
 const favs = getFavorites();
 
-export const userModality = "muscu";
+export const userModality = "weight lifting";
 
 export function generateReps(ex: Exercise) {
   if (ex.muscle === "Core") {
@@ -20,7 +20,7 @@ export function generateReps(ex: Exercise) {
     return "3 x 12";
   }
 
-  if (ex.modality === "muscu") {
+  if (ex.modality === "weight lifting") {
     return "3 x 10";
   }
 
