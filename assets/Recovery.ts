@@ -75,3 +75,10 @@ export async function markMuscleWorked(muscle: string) {
 export function _getRecoveryMap() {
   return lastWorked;
 }
+
+export async function resetRecovery() {
+  Object.keys(RECOVERY_TIME).forEach((m) => {
+    lastWorked[m] = 0;
+  });
+  await AsyncStorage.setItem(KEY, JSON.stringify(lastWorked));
+}

@@ -1,36 +1,29 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { useMemo, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
   RECOVERY_TIME,
-  isMuscleReady,
-  recoveryRemaining,
   _getRecoveryMap,
+  isMuscleReady,
   loadRecovery,
+  resetRecovery,
 } from "assets/Recovery";
 
 import { COLORS } from "constants/Colors";
 
 const MUSCLES = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core"];
 
-useEffect(() => {
-  loadRecovery(); // charge le storage
-}, []);
-
-
 function computeRecovery(muscle: string) {
   const base = RECOVERY_TIME[muscle] ?? 48;
   const last = _getRecoveryMap()[muscle];
 
-
-
   if (!last) {
     return {
       ready: true,
-      progress: 1, // 100%
+      progress: 1,
       hoursLeft: 0,
     };
   }
@@ -41,20 +34,33 @@ function computeRecovery(muscle: string) {
 
   return {
     ready: isMuscleReady(muscle),
-    progress: ratio, // entre 0 et 1
+    progress: ratio,
     hoursLeft,
   };
 }
 
 export default function RecoveryScreen() {
+  const [version, setVersion] = useState(0);
+
+  // Charger la recovery au montage
+  useEffect(() => {
+    loadRecovery().then(() => setVersion((v) => v + 1));
+  }, []);
+
+  // recalcul dynamique
   const data = useMemo(
     () =>
       MUSCLES.map((m) => ({
         muscle: m,
         ...computeRecovery(m),
       })),
-    []
+    [version]
   );
+
+  async function onReset() {
+    await resetRecovery();
+    setVersion((v) => v + 1);
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -67,6 +73,14 @@ export default function RecoveryScreen() {
         <Text style={styles.title}>Recovery</Text>
         <Text style={styles.subtitle}>Based on your last workouts</Text>
 
+        {/* Reset Recovery Button */}
+        <Pressable
+          style={[styles.debugButton, { backgroundColor: "#5a2a2a" }]}
+          onPress={onReset}
+        >
+          <Text style={styles.debugText}>Reset Recovery</Text>
+        </Pressable>
+
         <View style={styles.card}>
           <ScrollView>
             {data.map((item) => {
@@ -75,16 +89,14 @@ export default function RecoveryScreen() {
 
               let statusText = "Ready";
               if (!item.ready && item.hoursLeft > 0) {
-                if (days > 0) {
-                  statusText = `${days} j ${hours} h restants`;
-                } else {
-                  statusText = `${hours} h restantes`;
-                }
+                statusText =
+                  days > 0
+                    ? `${days} j ${hours} h restants`
+                    : `${hours} h restantes`;
               }
 
               return (
                 <View key={item.muscle} style={styles.state}>
-                  {/* Titre muscle + statut */}
                   <View style={styles.rowHeader}>
                     <Text style={styles.muscle}>{item.muscle}</Text>
                     <Text style={[styles.status, item.ready && styles.ready]}>
@@ -92,7 +104,6 @@ export default function RecoveryScreen() {
                     </Text>
                   </View>
 
-                  {/* Barre de progression */}
                   <View style={styles.barBackground}>
                     <View
                       style={[
@@ -109,6 +120,7 @@ export default function RecoveryScreen() {
             })}
           </ScrollView>
         </View>
+
         <View style={styles.row}>
           <Link href="/workouts" asChild>
             <Pressable style={styles.linkButton}>
@@ -141,6 +153,17 @@ const styles = StyleSheet.create({
     color: COLORS.subtext,
     fontSize: 14,
     marginBottom: 8,
+  },
+  debugButton: {
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: COLORS.accent,
+  },
+  debugText: {
+    color: COLORS.text,
+    fontSize: 14,
   },
   card: {
     marginVertical: 12,

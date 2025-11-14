@@ -68,7 +68,6 @@ export function generateWorkout(durationMinutes: number) {
   scored.sort((a, b) => b.score - a.score);
 
   // Étape 4 : remplir jusqu’à la durée demandée
-  // Étape 4 : remplir jusqu’à la durée demandée
   const chosen: Exercise[] = [];
   const usedMuscles: Set<string> = new Set(); // 👈 muscles déjà utilisés
   let total = 0;
@@ -115,23 +114,26 @@ type WorkoutResult = {
 const dailyCache: Record<number, { date: string; result: WorkoutResult }> = {};
 
 // retourne la date du jour au format "YYYY-MM-DD"
-function todayKey() {
+function todayKey() { 
   return new Date().toISOString().slice(0, 10);
 }
 
 // 👉 fonction à utiliser dans l'app
-export function getDailyWorkout(durationMinutes: number): WorkoutResult {
+export function getDailyWorkout(
+  durationMinutes: number,
+  forceNew: boolean = false
+): WorkoutResult {
   const key = durationMinutes;
   const today = todayKey();
 
   const cached = dailyCache[key];
 
-  // si on a déjà généré un workout pour cette durée aujourd'hui → on le réutilise
-  if (cached && cached.date === today) {
+  // si on NE force PAS et qu'on a un cache pour aujourd'hui → on le réutilise
+  if (!forceNew && cached && cached.date === today) {
     return cached.result;
   }
 
-  // sinon on en génère un nouveau, et on le met dans le cache
+  // sinon on génère un nouveau workout et on écrase le cache du jour
   const result = generateWorkout(durationMinutes);
   dailyCache[key] = { date: today, result };
 

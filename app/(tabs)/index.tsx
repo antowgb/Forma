@@ -15,8 +15,8 @@ export default function HomeScreen() {
   const [workout, setWorkout] = useState<Exercise[]>([]);
   const [notice, setNotice] = useState("");
 
-  function onGenerate() {
-    const result = getDailyWorkout(duration); // 👈 au lieu de generateWorkout
+  function onGenerate(force: boolean = false) {
+    const result = getDailyWorkout(duration, force);
     setWorkout(result.exercises);
     setNotice(result.notice);
   }
@@ -59,6 +59,13 @@ export default function HomeScreen() {
 
       <View style={styles.container}>
         <Text style={styles.title}>Forma</Text>
+
+        <Pressable
+          style={[styles.debugButton, { backgroundColor: "#3a3a3a" }]}
+          onPress={() => onGenerate(true)}
+        >
+          <Text style={styles.debugText}>Regenerate</Text>
+        </Pressable>
 
         {/* Choix durée */}
         <View style={styles.row}>
@@ -133,6 +140,18 @@ const styles = StyleSheet.create({
     fontSize: 38,
     fontWeight: "800",
   },
+  debugButton: {
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: COLORS.accent,
+  },
+  debugText: {
+    color: COLORS.text,
+    fontSize: 14,
+  },
+
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
