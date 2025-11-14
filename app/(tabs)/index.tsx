@@ -1,6 +1,7 @@
 import { Exercise } from "assets/Types";
 import { COLORS } from "constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
+import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -89,6 +90,18 @@ export default function HomeScreen() {
             ))}
           </ScrollView>
         </View>
+        <View style={styles.row}>
+          <Link href="/workouts" asChild>
+            <Pressable style={styles.linkButton}>
+              <Text style={styles.linkText}>Workouts</Text>
+            </Pressable>
+          </Link>
+          <Link href="/recovery" asChild>
+            <Pressable style={styles.linkButton}>
+              <Text style={styles.linkText}>Recovery</Text>
+            </Pressable>
+          </Link>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -136,6 +149,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   generateText: {
+    fontSize: 20,
     color: COLORS.text,
     fontWeight: "700",
   },
@@ -172,5 +186,18 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     alignItems: "center",
+  },
+  linkButton: {
+    width: "48%",
+    marginTop: 10,
+    backgroundColor: COLORS.accent,
+    borderRadius: 12,
+    padding: 12,
+    alignItems: "center",
+  },
+  linkText: {
+    fontSize: 20,
+    color: COLORS.text,
+    fontWeight: "700",
   },
 });
