@@ -78,8 +78,8 @@ function scoreExercise(ex: Exercise, readySet: Set<string>) {
   if (readySet.has(ex.muscle)) score += 100;
   if (ex.modality === userModality || ex.modality === "both") score += 20;
   score += Math.max(0, 20 - ex.estMinutes);
-  if (favs[ex.id]) score += 80;
-  score += Math.random() * 10;
+  if (favs[ex.id]) score += 25;
+  score += Math.random() * 25;
 
   return score;
 }
