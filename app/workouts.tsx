@@ -1,10 +1,11 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { EXERCISES } from "assets/Exercises";
+import { loadFavorites, toggleFavorite } from "assets/Favorites"; // 👈 import
 import { generateReps } from "assets/GenerateWorkout";
 import { Exercise } from "assets/Types";
 import { COLORS } from "constants/Colors";
@@ -16,11 +17,15 @@ export default function WorkoutsScreen() {
   const [filter, setFilter] = useState<FilterMode>("all");
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
 
-  function toggleFavorite(id: string) {
-    setFavorites((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+  // 🔹 charger les favoris au montage
+  useEffect(() => {
+    loadFavorites().then((f) => setFavorites({ ...f }));
+  }, []);
+
+  // 🔹 basculer un favori + mettre à jour le state
+  async function onToggle(id: string) {
+    const updated = await toggleFavorite(id);
+    setFavorites({ ...updated });
   }
 
   // Filtrage simple
@@ -102,7 +107,7 @@ export default function WorkoutsScreen() {
                         </View>
 
                         <Pressable
-                          onPress={() => toggleFavorite(ex.id)}
+                          onPress={() => onToggle(ex.id)}
                           style={styles.favoriteButton}
                         >
                           <Text style={styles.favoriteIcon}>
@@ -117,6 +122,7 @@ export default function WorkoutsScreen() {
             })}
           </ScrollView>
         </View>
+
         <View style={styles.row}>
           <Link href="/" asChild>
             <Pressable style={styles.linkButton}>
@@ -135,6 +141,7 @@ export default function WorkoutsScreen() {
 }
 
 const styles = StyleSheet.create({
+  // (tes styles identiques)
   container: {
     flex: 1,
     padding: 24,

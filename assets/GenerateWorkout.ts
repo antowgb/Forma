@@ -1,6 +1,9 @@
 import { EXERCISES } from "assets/Exercises";
+import { getFavorites } from "assets/Favorites";
 import { isMuscleReady } from "assets/Recovery";
 import { Exercise } from "./Types";
+
+const favs = getFavorites();
 
 // modalité préférée (simple pour l’instant)
 export const userModality = "muscu"; // plus tard: réglage utilisateur
@@ -52,6 +55,10 @@ export function generateWorkout(durationMinutes: number) {
     if (readyMuscles.includes(ex.muscle)) s += 100;
     if (ex.modality === userModality || ex.modality === "both") s += 20;
     s += Math.max(0, 20 - ex.estMinutes);
+    // 4. Favoris → priorité très haute
+    if (favs[ex.id]) s += 80;
+
+    // 5. Bonus léger random (= variété)
     s += Math.random() * 10;
 
     return { ex, score: s };
