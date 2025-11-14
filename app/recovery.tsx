@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -22,6 +22,13 @@ type RecoveryInfo = {
   hoursLeft: number;
   multiplier: number;
 };
+
+type SortMode = "alpha" | "readySoon";
+
+const SORT_OPTIONS: { key: SortMode; label: string }[] = [
+  { key: "alpha", label: "A → Z" },
+  { key: "readySoon", label: "Ready Soon" },
+];
 
 function computeRecovery(muscle: string): RecoveryInfo {
   const entry = _getRecoveryMap()[muscle];
@@ -60,10 +67,8 @@ const buildRecoverySnapshot = () =>
 
 export default function RecoveryScreen() {
   const [data, setData] = useState(buildRecoverySnapshot);
-  const refreshData = useCallback(
-    () => setData(buildRecoverySnapshot()),
-    []
-  );
+  const [sortMode, setSortMode] = useState<SortMode>("alpha");
+  const refreshData = useCallback(() => setData(buildRecoverySnapshot()), []);
 
   // Charger la recovery au montage
   useEffect(() => {
@@ -74,6 +79,19 @@ export default function RecoveryScreen() {
     await resetRecovery();
     refreshData();
   }
+
+  const sortedData = useMemo(() => {
+    const base = [...data];
+    if (sortMode === "readySoon") {
+      return base.sort((a, b) => {
+        if (a.ready !== b.ready) {
+          return Number(a.ready) - Number(b.ready);
+        }
+        return a.hoursLeft - b.hoursLeft;
+      });
+    }
+    return base.sort((a, b) => a.muscle.localeCompare(b.muscle));
+  }, [data, sortMode]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -86,18 +104,43 @@ export default function RecoveryScreen() {
         <View style={styles.headerTop}>
           <Text style={styles.title}>Recovery</Text>
 
-          {/* Reset Recovery Button */}
           <Pressable
-            style={[styles.reloadButton, { alignSelf: "flex-start" }]}
+            style={({ pressed }) => [
+              styles.reloadButton,
+              pressed && styles.pressablePressed,
+            ]}
             onPress={onReset}
           >
             <Ionicons name="reload" size={24} color={COLORS.text} />
           </Pressable>
         </View>
 
+        <View style={styles.sortRow}>
+          {SORT_OPTIONS.map((option) => (
+            <Pressable
+              key={option.key}
+              onPress={() => setSortMode(option.key)}
+              style={({ pressed }) => [
+                styles.sortChip,
+                sortMode === option.key && styles.sortChipActive,
+                pressed && styles.pressablePressed,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.sortChipText,
+                  sortMode === option.key && styles.sortChipTextActive,
+                ]}
+              >
+                {option.label}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+
         <View style={styles.card}>
           <ScrollView>
-            {data.map((item) => {
+            {sortedData.map((item) => {
               const days = Math.floor(item.hoursLeft / 24);
               const hours = Math.round(item.hoursLeft % 24);
 
@@ -105,8 +148,8 @@ export default function RecoveryScreen() {
               if (!item.ready && item.hoursLeft > 0) {
                 statusText =
                   days > 0
-                    ? `${days} j ${hours} h restants`
-                    : `${hours} h restantes`;
+                    ? `${days}d ${hours}h remaining`
+                    : `${hours}h remaining`;
               }
 
               return (
@@ -137,15 +180,31 @@ export default function RecoveryScreen() {
 
         <View style={styles.row}>
           <Link href="/workouts" asChild>
-            <Pressable style={styles.linkButton}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.linkButton,
+                pressed && styles.pressablePressed,
+              ]}
+            >
               <Text style={styles.linkText}>Workouts</Text>
             </Pressable>
           </Link>
           <Link href="/" asChild>
-            <Pressable style={styles.linkButton}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.linkButton,
+                pressed && styles.pressablePressed,
+              ]}
+            >
               <Text style={styles.linkText}>Home</Text>
             </Pressable>
           </Link>
+        </View>
+
+        <View style={styles.bannerPlaceholder} pointerEvents="none">
+          <Text style={styles.bannerText}>
+            Reserved space for upcoming ad banner
+          </Text>
         </View>
       </View>
     </SafeAreaView>
@@ -157,6 +216,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     gap: 12,
+    paddingBottom: 48,
   },
   headerTop: {
     flexDirection: "row",
@@ -172,20 +232,59 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 999,
     backgroundColor: COLORS.accent,
+    shadowColor: COLORS.accent,
+    shadowOpacity: 0.5,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
   },
   debugText: {
     color: COLORS.text,
     fontSize: 14,
   },
+  sortRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    marginBottom: 4,
+  },
+  sortChip: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: COLORS.accent,
+    backgroundColor: COLORS.panel + "40",
+    shadowColor: COLORS.accent,
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 6,
+  },
+  sortChipActive: {
+    backgroundColor: COLORS.accent,
+  },
+  sortChipText: {
+    color: COLORS.text,
+    fontSize: 13,
+  },
+  sortChipTextActive: {
+    color: COLORS.background,
+    fontWeight: "700",
+  },
   card: {
     marginVertical: 12,
-    maxHeight: 350,
     flex: 1,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: COLORS.accent,
     backgroundColor: COLORS.panel + "55",
     padding: 16,
+    shadowColor: COLORS.accent,
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 12 },
+    elevation: 12,
   },
   state: {
     marginBottom: 14,
@@ -193,7 +292,7 @@ const styles = StyleSheet.create({
   rowHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 4,
+    marginVertical: 5,
   },
   muscle: {
     color: COLORS.text,
@@ -222,7 +321,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 12,
+    marginVertical: 15,
   },
   linkButton: {
     width: "48%",
@@ -231,10 +330,40 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     alignItems: "center",
+    shadowColor: COLORS.accent,
+    shadowOpacity: 0.45,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 10,
+    borderWidth: 1,
+    borderColor: COLORS.text + "55",
   },
   linkText: {
     fontSize: 20,
     color: COLORS.text,
     fontWeight: "700",
+    letterSpacing: 0.8,
+    textTransform: "uppercase",
+  },
+  pressablePressed: {
+    transform: [{ scale: 0.97 }],
+    opacity: 0.85,
+  },
+  bannerPlaceholder: {
+    marginTop: 14,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderStyle: "dashed",
+    borderColor: COLORS.accent,
+    paddingVertical: 18,
+    paddingHorizontal: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: COLORS.panel + "40",
+  },
+  bannerText: {
+    color: COLORS.text + "99",
+    fontSize: 14,
+    letterSpacing: 0.6,
   },
 });

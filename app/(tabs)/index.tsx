@@ -101,7 +101,10 @@ export default function HomeScreen() {
           <Text style={styles.title}>Forma</Text>
 
           <Pressable
-            style={[styles.reloadButton, { alignSelf: "flex-end" }]}
+            style={({ pressed }) => [
+              styles.reloadButton,
+              pressed && styles.pressablePressed,
+            ]}
             onPress={() => onGenerate(true)}
           >
             <Ionicons name="reload" size={24} color={COLORS.text} />
@@ -114,9 +117,10 @@ export default function HomeScreen() {
             <Pressable
               key={d}
               onPress={() => setDuration(d)}
-              style={[
+              style={({ pressed }) => [
                 styles.durationButton,
                 duration === d && styles.durationActive,
+                pressed && styles.pressablePressed,
               ]}
             >
               <Text
@@ -132,7 +136,13 @@ export default function HomeScreen() {
         </View>
 
         {workout.length > 0 && (
-          <Pressable style={styles.done} onPress={complete}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.done,
+              pressed && styles.pressablePressed,
+            ]}
+            onPress={complete}
+          >
             <Text style={styles.generateText}>
               {completed ? "Workout Registered" : "Mark Completed"}
             </Text>
@@ -157,15 +167,31 @@ export default function HomeScreen() {
         </View>
         <View style={styles.row}>
           <Link href="/workouts" asChild>
-            <Pressable style={styles.linkButton}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.linkButton,
+                pressed && styles.pressablePressed,
+              ]}
+            >
               <Text style={styles.linkText}>Workouts</Text>
             </Pressable>
           </Link>
           <Link href="/recovery" asChild>
-            <Pressable style={styles.linkButton}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.linkButton,
+                pressed && styles.pressablePressed,
+              ]}
+            >
               <Text style={styles.linkText}>Recovery</Text>
             </Pressable>
           </Link>
+        </View>
+
+        <View style={styles.bannerPlaceholder} pointerEvents="none">
+          <Text style={styles.bannerText}>
+            Reserved space for upcoming ad banner
+          </Text>
         </View>
       </View>
     </SafeAreaView>
@@ -177,6 +203,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     gap: 12,
+    paddingBottom: 48,
   },
   headerTop: {
     flexDirection: "row",
@@ -192,6 +219,11 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 999,
     backgroundColor: COLORS.accent,
+    shadowColor: COLORS.accent,
+    shadowOpacity: 0.5,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
   },
   debugText: {
     color: COLORS.text,
@@ -247,6 +279,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     backgroundColor: COLORS.panel + "50",
+    shadowColor: COLORS.accent,
+    shadowOpacity: 0.35,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 12,
   },
   muscleTitle: {
     color: COLORS.text,
@@ -265,6 +302,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     alignItems: "center",
+    shadowColor: COLORS.accent,
+    shadowOpacity: 0.45,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 10,
   },
   linkButton: {
     width: "48%",
@@ -273,12 +315,40 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     alignItems: "center",
+    shadowColor: COLORS.accent,
+    shadowOpacity: 0.45,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 10,
+    borderWidth: 1,
+    borderColor: COLORS.text + "55",
   },
   linkText: {
     fontSize: 20,
     color: COLORS.text,
     fontWeight: "700",
+    letterSpacing: 0.8,
+    textTransform: "uppercase",
+  },
+  pressablePressed: {
+    transform: [{ scale: 0.97 }],
+    opacity: 0.85,
+  },
+  bannerPlaceholder: {
+    marginTop: 20,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderStyle: "dashed",
+    borderColor: COLORS.accent,
+    paddingVertical: 18,
+    paddingHorizontal: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: COLORS.panel + "40",
+  },
+  bannerText: {
+    color: COLORS.text + "99",
+    fontSize: 14,
+    letterSpacing: 0.6,
   },
 });
-
-
