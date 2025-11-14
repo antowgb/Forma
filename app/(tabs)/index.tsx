@@ -1,8 +1,8 @@
-import { Exercise } from "assets/Types";
+﻿import { Exercise } from "assets/Types";
 import { COLORS } from "constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -15,11 +15,22 @@ export default function HomeScreen() {
   const [duration, setDuration] = useState(90);
   const [workout, setWorkout] = useState<Exercise[]>([]);
   const [notice, setNotice] = useState("");
+  const [completed, setCompleted] = useState(false);
+  const completionResetRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function resetCompletionState() {
+    if (completionResetRef.current) {
+      clearTimeout(completionResetRef.current);
+      completionResetRef.current = null;
+    }
+    setCompleted(false);
+  }
 
   function onGenerate(force: boolean = false) {
     const result = getDailyWorkout(duration, force);
     setWorkout(result.exercises);
     setNotice(result.notice);
+    resetCompletionState();
   }
 
   // 🔹 charger la recovery une fois au lancement, puis générer le workout du jour
@@ -50,13 +61,28 @@ export default function HomeScreen() {
       )
     );
 
-    setNotice("Workout enregistré !");
+    setCompleted(true);
+    if (completionResetRef.current) {
+      clearTimeout(completionResetRef.current);
+    }
+    completionResetRef.current = setTimeout(() => {
+      setCompleted(false);
+      completionResetRef.current = null;
+    }, 1500);
 
     setTimeout(() => {
       const result = getDailyWorkout(duration);
       setWorkout(result.exercises);
     }, 200);
   }
+
+  useEffect(() => {
+    return () => {
+      if (completionResetRef.current) {
+        clearTimeout(completionResetRef.current);
+      }
+    };
+  }, []);
 
   const simpleGroups = workout.reduce((acc: Record<string, Exercise[]>, ex) => {
     (acc[ex.muscle] ||= []).push(ex);
@@ -78,7 +104,7 @@ export default function HomeScreen() {
             style={[styles.reloadButton, { alignSelf: "flex-end" }]}
             onPress={() => onGenerate(true)}
           >
-            <Ionicons name="reload" size={24} color="black" />
+            <Ionicons name="reload" size={24} color={COLORS.text} />
           </Pressable>
         </View>
 
@@ -107,7 +133,9 @@ export default function HomeScreen() {
 
         {workout.length > 0 && (
           <Pressable style={styles.done} onPress={complete}>
-            <Text style={styles.generateText}>Mark Completed</Text>
+            <Text style={styles.generateText}>
+              {completed ? "Workout Registered" : "Mark Completed"}
+            </Text>
           </Pressable>
         )}
         {notice ? <Text style={styles.notice}>{notice}</Text> : null}
@@ -252,3 +280,5 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
+
+

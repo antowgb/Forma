@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -52,27 +52,27 @@ function computeRecovery(muscle: string): RecoveryInfo {
   };
 }
 
+const buildRecoverySnapshot = () =>
+  MUSCLES.map((muscle) => ({
+    muscle,
+    ...computeRecovery(muscle),
+  }));
+
 export default function RecoveryScreen() {
-  const [version, setVersion] = useState(0);
+  const [data, setData] = useState(buildRecoverySnapshot);
+  const refreshData = useCallback(
+    () => setData(buildRecoverySnapshot()),
+    []
+  );
 
   // Charger la recovery au montage
   useEffect(() => {
-    loadRecovery().then(() => setVersion((v) => v + 1));
-  }, []);
-
-  // recalcul dynamique
-  const data = useMemo(
-    () =>
-      MUSCLES.map((m) => ({
-        muscle: m,
-        ...computeRecovery(m),
-      })),
-    [version]
-  );
+    loadRecovery().then(() => refreshData());
+  }, [refreshData]);
 
   async function onReset() {
     await resetRecovery();
-    setVersion((v) => v + 1);
+    refreshData();
   }
 
   return (
@@ -91,7 +91,7 @@ export default function RecoveryScreen() {
             style={[styles.reloadButton, { alignSelf: "flex-start" }]}
             onPress={onReset}
           >
-            <Ionicons name="reload" size={24} color="black" />
+            <Ionicons name="reload" size={24} color={COLORS.text} />
           </Pressable>
         </View>
 

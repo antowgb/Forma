@@ -122,11 +122,8 @@ export async function markMuscleWorked(
   const now = Date.now();
   const multiplier = sessionMultiplier(exerciseCount);
   const durationMs = requiredHours(muscle) * multiplier * MS_PER_HOUR;
-  const current = recoveryMap[muscle];
-
-  const hasCooldown = current && current.end > now;
-  const start = hasCooldown ? current.start : now;
-  const end = (hasCooldown ? current.end : now) + durationMs;
+  const start = now;
+  const end = now + durationMs;
 
   recoveryMap[muscle] = {
     start,
