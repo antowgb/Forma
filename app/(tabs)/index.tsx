@@ -8,7 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { generateReps, getDailyWorkout } from "assets/GenerateWorkout";
 
-import { markMuscleWorked } from "assets/Recovery";
+import { loadRecovery, markMuscleWorked } from "assets/Recovery";
 
 export default function HomeScreen() {
   const [duration, setDuration] = useState(90);
@@ -21,19 +21,34 @@ export default function HomeScreen() {
     setNotice(result.notice);
   }
 
-  function complete() {
-    workout.forEach((ex) => markMuscleWorked(ex.muscle));
+  // 🔹 charger la recovery une fois au lancement, puis générer le workout du jour
+  useEffect(() => {
+    loadRecovery().then(() => {
+      onGenerate();
+    });
+  }, []);
+
+  // 🔹 si tu veux un workout différent par durée le même jour, tu peux garder ça :
+  useEffect(() => {
+    onGenerate();
+  }, [duration]);
+
+  // 🔹 marquer comme complété (et sauvegarder la recovery)
+  async function complete() {
+    await Promise.all(workout.map((ex) => markMuscleWorked(ex.muscle)));
+
     setNotice("Workout enregistré !");
+
+    setTimeout(() => {
+      const result = getDailyWorkout(duration);
+      setWorkout(result.exercises);
+    }, 200);
   }
 
   const simpleGroups = workout.reduce((acc: Record<string, Exercise[]>, ex) => {
     (acc[ex.muscle] ||= []).push(ex);
     return acc;
   }, {});
-
-  useEffect(() => {
-    onGenerate();
-  }, [duration]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

@@ -1,17 +1,31 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { RECOVERY_TIME, isMuscleReady, lastWorked } from "assets/Recovery";
+import {
+  RECOVERY_TIME,
+  isMuscleReady,
+  recoveryRemaining,
+  _getRecoveryMap,
+  loadRecovery,
+} from "assets/Recovery";
+
 import { COLORS } from "constants/Colors";
 
 const MUSCLES = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core"];
 
+useEffect(() => {
+  loadRecovery(); // charge le storage
+}, []);
+
+
 function computeRecovery(muscle: string) {
   const base = RECOVERY_TIME[muscle] ?? 48;
-  const last = lastWorked[muscle];
+  const last = _getRecoveryMap()[muscle];
+
+
 
   if (!last) {
     return {
