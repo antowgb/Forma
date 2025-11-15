@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import BannerAdView from "components/ads/Banner";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -201,11 +202,7 @@ export default function RecoveryScreen() {
           </Link>
         </View>
 
-        <View style={styles.bannerPlaceholder} pointerEvents="none">
-          <Text style={styles.bannerText}>
-            Reserved space for upcoming ad banner
-          </Text>
-        </View>
+        <BannerAdView />
       </View>
     </SafeAreaView>
   );
@@ -274,6 +271,7 @@ const styles = StyleSheet.create({
   },
   card: {
     marginVertical: 12,
+    maxHeight: 380,
     flex: 1,
     borderRadius: 20,
     borderWidth: 1,

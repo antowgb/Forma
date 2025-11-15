@@ -1,14 +1,14 @@
+import { EXERCISES } from "assets/Exercises";
+import { loadFavorites, toggleFavorite } from "assets/Favorites"; // 👈 import
+import { generateReps } from "assets/GenerateWorkout";
+import { Exercise } from "assets/Types";
+import BannerAdView from "components/ads/Banner";
+import { COLORS } from "constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-import { EXERCISES } from "assets/Exercises";
-import { loadFavorites, toggleFavorite } from "assets/Favorites"; // 👈 import
-import { generateReps } from "assets/GenerateWorkout";
-import { Exercise } from "assets/Types";
-import { COLORS } from "constants/Colors";
 
 const MUSCLES = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core"] as const;
 type FilterMode = "all" | "weight lifting" | "calisthenics";
@@ -154,11 +154,7 @@ export default function WorkoutsScreen() {
           </Link>
         </View>
 
-        <View style={styles.bannerPlaceholder} pointerEvents="none">
-          <Text style={styles.bannerText}>
-            Reserved space for upcoming ad banner
-          </Text>
-        </View>
+        <BannerAdView />
       </View>
     </SafeAreaView>
   );

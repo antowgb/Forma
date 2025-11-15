@@ -3,6 +3,6 @@ export const COLORS = {
   panel: "#14181C",
   border: "#1F2933",
   text: "#F9FAFB",
-  subtext: "#9AA4AA",
-  accent: "#EF4444",
+  subtext: "#abb0b4ff",
+  accent: "#f91919ff",
 };
