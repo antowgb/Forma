@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 12,
+    marginVertical: 8,
   },
   durationButton: {
     paddingVertical: 6,

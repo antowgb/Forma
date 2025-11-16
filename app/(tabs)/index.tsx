@@ -1,10 +1,11 @@
-import { getDailyWorkout } from "assets/GenerateWorkout";
+import { getDailyWorkout, WorkoutModality } from "assets/GenerateWorkout";
 import { Exercise } from "assets/Types";
 import { loadRecovery, markMuscleWorked } from "assets/Recovery";
 import BannerAdView from "components/ads/Banner";
 import NavLinkRow from "components/common/NavLinkRow";
 import ScreenHeader from "components/common/ScreenHeader";
 import DurationSelector from "components/home/DurationSelector";
+import ModalityFilter from "components/home/ModalityFilter";
 import WorkoutCompletionButton from "components/home/WorkoutCompletionButton";
 import WorkoutGroupsList from "components/home/WorkoutGroupsList";
 import { COLORS } from "constants/Colors";
@@ -15,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const [duration, setDuration] = useState(90);
+  const [modality, setModality] = useState<WorkoutModality>("both");
   const [workout, setWorkout] = useState<Exercise[]>([]);
   const [notice, setNotice] = useState("");
   const [completed, setCompleted] = useState(false);
@@ -29,7 +31,10 @@ export default function HomeScreen() {
   }
 
   function onGenerate(force: boolean = false) {
-    const result = getDailyWorkout(duration, force);
+    const result = getDailyWorkout(duration, {
+      forceNew: force,
+      modality,
+    });
     setWorkout(result.exercises);
     setNotice(result.notice);
     resetCompletionState();
@@ -45,7 +50,7 @@ export default function HomeScreen() {
   // ?? si tu veux un workout différent par durée le même jour, tu peux garder ça :
   useEffect(() => {
     onGenerate();
-  }, [duration]);
+  }, [duration, modality]);
 
   // ?? marquer comme complété (et sauvegarder la recovery)
   async function complete() {
@@ -73,7 +78,7 @@ export default function HomeScreen() {
     }, 1500);
 
     setTimeout(() => {
-      const result = getDailyWorkout(duration);
+      const result = getDailyWorkout(duration, { modality });
       setWorkout(result.exercises);
     }, 200);
   }
@@ -107,6 +112,8 @@ export default function HomeScreen() {
           options={[30, 60, 90, 120]}
           onChange={setDuration}
         />
+
+        <ModalityFilter value={modality} onChange={setModality} />
 
         <WorkoutCompletionButton
           visible={workout.length > 0}

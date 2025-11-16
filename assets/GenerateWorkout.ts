@@ -5,7 +5,7 @@ import { Exercise } from "./Types";
 
 const favs = getFavorites();
 
-export const userModality = "weight lifting";
+export type WorkoutModality = "both" | "weight lifting" | "calisthenics";
 
 export function generateReps(ex: Exercise) {
   if (ex.muscle === "Core") {
@@ -34,7 +34,10 @@ const NO_SLOT_NOTICE =
 
 type ScoredExercise = { ex: Exercise; score: number };
 
-export function generateWorkout(durationMinutes: number) {
+export function generateWorkout(
+  durationMinutes: number,
+  modality: WorkoutModality
+) {
   const readyMuscles = listReadyMuscles();
 
   if (readyMuscles.length === 0) {
@@ -42,7 +45,7 @@ export function generateWorkout(durationMinutes: number) {
   }
 
   const readySet = new Set(readyMuscles);
-  const scored = scoreExercises(readySet);
+  const scored = scoreExercises(readySet, modality);
   scored.sort((a, b) => b.score - a.score);
 
   const musclePools = buildMusclePools(scored, readySet);
@@ -65,18 +68,31 @@ function listReadyMuscles() {
   return muscles.filter(isMuscleReady);
 }
 
-function scoreExercises(readySet: Set<string>): ScoredExercise[] {
-  return EXERCISES.map((ex) => ({
+function scoreExercises(
+  readySet: Set<string>,
+  modality: WorkoutModality
+): ScoredExercise[] {
+  return EXERCISES.filter((ex) => matchesModality(ex, modality)).map((ex) => ({
     ex,
-    score: scoreExercise(ex, readySet),
+    score: scoreExercise(ex, readySet, modality),
   }));
 }
 
-function scoreExercise(ex: Exercise, readySet: Set<string>) {
+function scoreExercise(
+  ex: Exercise,
+  readySet: Set<string>,
+  modality: WorkoutModality
+) {
   let score = 0;
 
   if (readySet.has(ex.muscle)) score += 100;
-  if (ex.modality === userModality || ex.modality === "both") score += 20;
+  if (
+    modality === "both"
+      ? ex.modality === "both"
+      : ex.modality === modality || ex.modality === "both"
+  ) {
+    score += 20;
+  }
   score += Math.max(0, 20 - ex.estMinutes);
   if (favs[ex.id]) score += 25;
   score += Math.random() * 25;
@@ -208,17 +224,36 @@ type WorkoutResult = {
   notice: string;
 };
 
-const dailyCache: Record<number, { date: string; result: WorkoutResult }> = {};
+const dailyCache: Record<string, { date: string; result: WorkoutResult }> = {};
 
 function todayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function matchesModality(ex: Exercise, modality: WorkoutModality) {
+  if (modality === "both") return true;
+  if (modality === "weight lifting") {
+    return ex.modality === "weight lifting" || ex.modality === "both";
+  }
+
+  return ex.modality === "calisthenics" || ex.modality === "both";
+}
+
+function cacheKey(duration: number, modality: WorkoutModality) {
+  return `${duration}-${modality}`;
+}
+
+type DailyWorkoutOptions = {
+  forceNew?: boolean;
+  modality?: WorkoutModality;
+};
+
 export function getDailyWorkout(
   durationMinutes: number,
-  forceNew: boolean = false
+  options: DailyWorkoutOptions = {}
 ): WorkoutResult {
-  const key = durationMinutes;
+  const { forceNew = false, modality = "weight lifting" } = options;
+  const key = cacheKey(durationMinutes, modality);
   const today = todayKey();
   const cached = dailyCache[key];
 
@@ -226,7 +261,7 @@ export function getDailyWorkout(
     return cached.result;
   }
 
-  const result = generateWorkout(durationMinutes);
+  const result = generateWorkout(durationMinutes, modality);
   dailyCache[key] = { date: today, result };
 
   return result;
