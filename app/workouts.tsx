@@ -87,8 +87,7 @@ export default function WorkoutsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
+    padding: 20,
     gap: 12,
-    paddingBottom: 48,
   },
 });

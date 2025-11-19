@@ -47,7 +47,8 @@ export default function ModalityFilter({
 const styles = StyleSheet.create({
   filters: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    gap: 8,
+    marginVertical: 8,
   },
   chip: {
     paddingHorizontal: 12,

@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 8,
+    marginTop: 8,
   },
   durationButton: {
     paddingVertical: 6,
@@ -59,8 +59,10 @@ const styles = StyleSheet.create({
   },
   durationText: {
     color: COLORS.text,
+    fontSize: 13,
   },
   durationTextActive: {
+    color: COLORS.text,
     fontWeight: "700",
   },
 });

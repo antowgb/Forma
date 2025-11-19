@@ -26,10 +26,7 @@ export default function Filters({ active, onChange }: FiltersProps) {
           ]}
         >
           <Text
-            style={[
-              styles.chipText,
-              active === mode && styles.chipTextActive,
-            ]}
+            style={[styles.chipText, active === mode && styles.chipTextActive]}
           >
             {mode === "all"
               ? "All"
@@ -70,7 +67,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   chipTextActive: {
-    color: COLORS.background,
+    color: COLORS.text,
     fontWeight: "700",
   },
 });

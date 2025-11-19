@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   sortChipTextActive: {
-    color: COLORS.background,
+    color: COLORS.text,
     fontWeight: "700",
   },
 });

@@ -108,15 +108,15 @@ export default function HomeScreen() {
 
         {notice ? <Text style={styles.notice}>{notice}</Text> : null}
 
-        {/* Filtre modalité */}
-        <ModalityFilter value={modality} onChange={setModality} />
-
         {/* Choix durée */}
         <DurationSelector
           value={duration}
           options={[30, 60, 90, 120]}
           onChange={setDuration}
         />
+
+        {/* Filtre modalité */}
+        <ModalityFilter value={modality} onChange={setModality} />
 
         {/* Workout affiché par muscle */}
         <WorkoutGroupsList groups={simpleGroups} />
@@ -143,7 +143,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
+    padding: 20,
     gap: 8,
   },
   notice: {
