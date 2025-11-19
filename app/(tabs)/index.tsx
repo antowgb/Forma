@@ -115,11 +115,11 @@ export default function HomeScreen() {
           onChange={setDuration}
         />
 
-        {/* Filtre modalité */}
-        <ModalityFilter value={modality} onChange={setModality} />
-
         {/* Workout affiché par muscle */}
         <WorkoutGroupsList groups={simpleGroups} />
+
+        {/* Filtre modalité */}
+        <ModalityFilter value={modality} onChange={setModality} />
 
         <RestTimer />
 

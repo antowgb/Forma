@@ -114,7 +114,7 @@ export default function RestTimer() {
 
 const styles = StyleSheet.create({
   card: {
-    marginVertical: 10,
+    marginVertical: 8,
     borderWidth: 1,
     borderColor: COLORS.accent,
     borderRadius: 12,
