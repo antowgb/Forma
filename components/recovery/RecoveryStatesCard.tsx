@@ -57,7 +57,7 @@ export default function RecoveryStatesCard({ data }: RecoveryStatesCardProps) {
 const styles = StyleSheet.create({
   card: {
     marginVertical: 12,
-    maxHeight: 380,
+    maxHeight: "70%",
     flex: 1,
     borderRadius: 20,
     borderWidth: 1,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   rowHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 5,
+    marginVertical: 15,
   },
   muscle: {
     color: COLORS.text,

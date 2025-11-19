@@ -63,8 +63,9 @@ export default function WorkoutGroups({
 
 const styles = StyleSheet.create({
   card: {
+    marginVertical: 12,
+    maxHeight: "70%",
     flex: 1,
-    maxHeight: 400,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: COLORS.accent,

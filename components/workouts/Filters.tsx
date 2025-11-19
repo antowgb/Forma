@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   filters: {
     flexDirection: "row",
     gap: 8,
-    marginBottom: 12,
+    marginBottom: 8,
   },
   chip: {
     paddingHorizontal: 12,

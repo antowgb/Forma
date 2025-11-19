@@ -1,8 +1,7 @@
 import { EXERCISES } from "assets/Exercises";
-import { loadFavorites, toggleFavorite } from "assets/Favorites"; // �Y'^ import
+import { loadFavorites, toggleFavorite } from "assets/Favorites";
 import { Exercise } from "assets/Types";
 import BannerAdView from "components/ads/Banner";
-import NavLinkRow from "components/common/NavLinkRow";
 import ScreenHeader from "components/common/ScreenHeader";
 import Filters from "components/workouts/Filters";
 import WorkoutGroups from "components/workouts/WorkoutGroups";
@@ -18,12 +17,12 @@ export default function WorkoutsScreen() {
   const [filter, setFilter] = useState<FilterMode>("all");
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
 
-  // �Y"� charger les favoris au montage
+  // Charger les favoris au montage
   useEffect(() => {
     loadFavorites().then((f) => setFavorites({ ...f }));
   }, []);
 
-  // �Y"� basculer un favori + mettre �� jour le state
+  // Toggle favorite
   async function onToggle(id: string) {
     const updated = await toggleFavorite(id);
     setFavorites({ ...updated });
@@ -69,13 +68,6 @@ export default function WorkoutsScreen() {
           groups={groups}
           favorites={favorites}
           onToggle={onToggle}
-        />
-
-        <NavLinkRow
-          links={[
-            { href: "/", label: "Home" },
-            { href: "/recovery", label: "Recovery" },
-          ]}
         />
 
         <BannerAdView />

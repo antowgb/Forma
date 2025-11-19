@@ -1,5 +1,4 @@
 import BannerAdView from "components/ads/Banner";
-import NavLinkRow from "components/common/NavLinkRow";
 import ScreenHeader from "components/common/ScreenHeader";
 import RecoveryStatesCard from "components/recovery/RecoveryStatesCard";
 import SortOptions from "components/recovery/SortOptions";
@@ -111,13 +110,6 @@ export default function RecoveryScreen() {
         />
 
         <RecoveryStatesCard data={sortedData} />
-
-        <NavLinkRow
-          links={[
-            { href: "/workouts", label: "Workouts" },
-            { href: "/", label: "Home" },
-          ]}
-        />
 
         <BannerAdView />
       </View>

@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 8,
-    marginBottom: 4,
+    marginBottom: 8,
   },
   sortChip: {
     paddingHorizontal: 12,

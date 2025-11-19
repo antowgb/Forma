@@ -35,7 +35,6 @@ export default function WorkoutCompletionButton({
 
 const styles = StyleSheet.create({
   done: {
-    marginTop: 10,
     backgroundColor: COLORS.accent,
     borderRadius: 12,
     padding: 12,

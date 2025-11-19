@@ -7,9 +7,7 @@ type WorkoutGroupsListProps = {
   groups: Record<string, Exercise[]>;
 };
 
-export default function WorkoutGroupsList({
-  groups,
-}: WorkoutGroupsListProps) {
+export default function WorkoutGroupsList({ groups }: WorkoutGroupsListProps) {
   return (
     <View style={styles.exerciseList}>
       <ScrollView>
@@ -31,7 +29,7 @@ export default function WorkoutGroupsList({
 
 const styles = StyleSheet.create({
   exerciseList: {
-    marginVertical: 8,
+    marginVertical: 4,
     height: 300,
     borderWidth: 1,
     borderColor: COLORS.accent,

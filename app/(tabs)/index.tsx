@@ -1,7 +1,6 @@
 import { getDailyWorkout, WorkoutModality } from "assets/GenerateWorkout";
 import { loadRecovery, markMuscleWorked } from "assets/Recovery";
 import { Exercise } from "assets/Types";
-import NavLinkRow from "components/common/NavLinkRow";
 import ScreenHeader from "components/common/ScreenHeader";
 import DurationSelector from "components/home/DurationSelector";
 import ModalityFilter from "components/home/ModalityFilter";
@@ -115,11 +114,11 @@ export default function HomeScreen() {
           onChange={setDuration}
         />
 
-        {/* Workout affiché par muscle */}
-        <WorkoutGroupsList groups={simpleGroups} />
-
         {/* Filtre modalité */}
         <ModalityFilter value={modality} onChange={setModality} />
+
+        {/* Workout affiché par muscle */}
+        <WorkoutGroupsList groups={simpleGroups} />
 
         <RestTimer />
 
@@ -127,13 +126,6 @@ export default function HomeScreen() {
           visible={workout.length > 0}
           completed={completed}
           onComplete={complete}
-        />
-
-        <NavLinkRow
-          links={[
-            { href: "/workouts", label: "Workouts" },
-            { href: "/recovery", label: "Recovery" },
-          ]}
         />
       </View>
     </SafeAreaView>
