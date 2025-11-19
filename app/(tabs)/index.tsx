@@ -6,6 +6,7 @@ import NavLinkRow from "components/common/NavLinkRow";
 import ScreenHeader from "components/common/ScreenHeader";
 import DurationSelector from "components/home/DurationSelector";
 import ModalityFilter from "components/home/ModalityFilter";
+import RestTimer from "components/home/RestTimer";
 import WorkoutCompletionButton from "components/home/WorkoutCompletionButton";
 import WorkoutGroupsList from "components/home/WorkoutGroupsList";
 import { COLORS } from "constants/Colors";
@@ -114,6 +115,8 @@ export default function HomeScreen() {
         />
 
         <ModalityFilter value={modality} onChange={setModality} />
+
+        <RestTimer />
 
         <WorkoutCompletionButton
           visible={workout.length > 0}
