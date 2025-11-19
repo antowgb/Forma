@@ -31,7 +31,7 @@ export default function WorkoutGroupsList({
 
 const styles = StyleSheet.create({
   exerciseList: {
-    marginTop: 20,
+    marginTop: 10,
     height: 300,
     borderWidth: 1,
     borderColor: COLORS.accent,

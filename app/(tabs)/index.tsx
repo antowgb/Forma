@@ -1,7 +1,6 @@
 import { getDailyWorkout, WorkoutModality } from "assets/GenerateWorkout";
-import { Exercise } from "assets/Types";
 import { loadRecovery, markMuscleWorked } from "assets/Recovery";
-import BannerAdView from "components/ads/Banner";
+import { Exercise } from "assets/Types";
 import NavLinkRow from "components/common/NavLinkRow";
 import ScreenHeader from "components/common/ScreenHeader";
 import DurationSelector from "components/home/DurationSelector";
@@ -107,6 +106,11 @@ export default function HomeScreen() {
       <View style={styles.container}>
         <ScreenHeader title="Forma" onReload={() => onGenerate(true)} />
 
+        {notice ? <Text style={styles.notice}>{notice}</Text> : null}
+
+        {/* Filtre modalité */}
+        <ModalityFilter value={modality} onChange={setModality} />
+
         {/* Choix durée */}
         <DurationSelector
           value={duration}
@@ -114,7 +118,8 @@ export default function HomeScreen() {
           onChange={setDuration}
         />
 
-        <ModalityFilter value={modality} onChange={setModality} />
+        {/* Workout affiché par muscle */}
+        <WorkoutGroupsList groups={simpleGroups} />
 
         <RestTimer />
 
@@ -124,19 +129,12 @@ export default function HomeScreen() {
           onComplete={complete}
         />
 
-        {notice ? <Text style={styles.notice}>{notice}</Text> : null}
-
-        {/* Workout affiché par muscle */}
-        <WorkoutGroupsList groups={simpleGroups} />
-
         <NavLinkRow
           links={[
             { href: "/workouts", label: "Workouts" },
             { href: "/recovery", label: "Recovery" },
           ]}
         />
-
-        <BannerAdView />
       </View>
     </SafeAreaView>
   );
@@ -146,8 +144,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    gap: 12,
-    paddingBottom: 48,
+    gap: 8,
   },
   notice: {
     color: COLORS.text,

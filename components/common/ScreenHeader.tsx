@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.accent,
     shadowColor: COLORS.accent,
     shadowOpacity: 0.5,
-    shadowRadius: 14,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 10,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 5,
   },
 });

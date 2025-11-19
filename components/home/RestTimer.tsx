@@ -67,9 +67,6 @@ export default function RestTimer() {
 
   return (
     <View style={styles.card}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Rest timer</Text>
-      </View>
 
       <View style={styles.row}>
         <Text style={styles.timeText}>{formattedTime}</Text>
@@ -78,14 +75,14 @@ export default function RestTimer() {
           onPress={handleToggle}
           style={({ pressed }) => [
             styles.playToggleButton,
-            running && styles.playToggleButtonActive,
+            running && styles.playToggleButton,
             pressed && pressableStyles.pressed,
           ]}
         >
           <Ionicons
             name={running ? "pause" : "play"}
             size={36}
-            color={running ? COLORS.background : COLORS.text}
+            color={COLORS.text}
           />
         </Pressable>
       </View>
@@ -117,12 +114,17 @@ export default function RestTimer() {
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 16,
-    backgroundColor: COLORS.panel + "60",
-    padding: 12,
-    gap: 8,
+    marginVertical: 10,
     borderWidth: 1,
-    borderColor: COLORS.panel + "20",
+    borderColor: COLORS.accent,
+    borderRadius: 12,
+    padding: 12,
+    backgroundColor: COLORS.panel + "50",
+    shadowColor: COLORS.accent,
+    shadowOpacity: 0.35,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 12,
   },
   header: {
     flexDirection: "row",
@@ -157,17 +159,6 @@ const styles = StyleSheet.create({
     borderRadius: 32,
     width: 64,
     height: 64,
-    borderWidth: 1,
-    borderColor: COLORS.accent,
-    backgroundColor: COLORS.panel + "40",
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 4,
-  },
-  playToggleButtonActive: {
-    backgroundColor: COLORS.accent,
   },
   toggleLabel: {
     color: COLORS.text,
