@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     borderWidth: 1,
     borderColor: COLORS.accent,
-    backgroundColor: COLORS.panel + "40",
+    backgroundColor: COLORS.panel + "50",
     shadowColor: COLORS.accent,
     shadowOpacity: 0.25,
     shadowRadius: 10,

@@ -7,8 +7,9 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 const PRESETS = [60, 90, 120];
 
 export default function RestTimer() {
-  const [selectedSeconds, setSelectedSeconds] = useState(PRESETS[0]);
-  const [remainingSeconds, setRemainingSeconds] = useState(PRESETS[0]);
+  const [selectedSeconds, setSelectedSeconds] = useState(PRESETS[1]);
+  const [remainingSeconds, setRemainingSeconds] = useState(PRESETS[1]);
+
   const [running, setRunning] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -68,28 +69,6 @@ export default function RestTimer() {
   return (
     <View style={styles.card}>
       <View style={styles.row}>
-        <View style={styles.presets}>
-          {PRESETS.map((seconds) => (
-            <Pressable
-              key={seconds}
-              onPress={() => setSelectedSeconds(seconds)}
-              style={({ pressed }) => [
-                styles.presetButton,
-                selectedSeconds === seconds && styles.presetActive,
-                pressed && pressableStyles.pressed,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.presetText,
-                  selectedSeconds === seconds && styles.presetTextActive,
-                ]}
-              >
-                {seconds}s
-              </Text>
-            </Pressable>
-          ))}
-        </View>
         <Text style={styles.timeText}>{formattedTime}</Text>
 
         <Pressable
@@ -106,6 +85,28 @@ export default function RestTimer() {
             color={COLORS.text}
           />
         </Pressable>
+      </View>
+      <View style={styles.presets}>
+        {PRESETS.map((seconds) => (
+          <Pressable
+            key={seconds}
+            onPress={() => setSelectedSeconds(seconds)}
+            style={({ pressed }) => [
+              styles.presetButton,
+              selectedSeconds === seconds && styles.presetActive,
+              pressed && pressableStyles.pressed,
+            ]}
+          >
+            <Text
+              style={[
+                styles.presetText,
+                selectedSeconds === seconds && styles.presetTextActive,
+              ]}
+            >
+              {seconds}s
+            </Text>
+          </Pressable>
+        ))}
       </View>
     </View>
   );
@@ -130,16 +131,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  title: {
-    color: COLORS.text,
-    fontSize: 12,
-    fontWeight: "700",
-    letterSpacing: 0.6,
-  },
-  caption: {
-    color: COLORS.text + "80",
-    fontSize: 10,
-  },
   row: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -147,7 +138,7 @@ const styles = StyleSheet.create({
   },
   timeText: {
     color: COLORS.text,
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: "700",
     textAlign: "center",
     letterSpacing: 1.5,
@@ -156,8 +147,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 32,
-    width: 64,
-    height: 64,
+    width: 52,
+    height: 52,
   },
   toggleLabel: {
     color: COLORS.text,
@@ -167,42 +158,29 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
   },
   presets: {
-    flexDirection: "column",
+    flexDirection: "row",
+    justifyContent: "space-between",
     gap: 8,
-    padding: 10,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: COLORS.accent + "60",
-    backgroundColor: COLORS.panel + "80",
-    shadowColor: COLORS.accent,
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 6,
-    minWidth: 96,
   },
   presetButton: {
     flex: 1,
-    borderRadius: 12,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    borderRadius: 999,
+    paddingVertical: 4,
     borderWidth: 1,
-    borderColor: COLORS.panel + "20",
-    backgroundColor: COLORS.panel,
+    borderColor: COLORS.accent,
+    backgroundColor: COLORS.accent + "20",
   },
   presetActive: {
-    borderColor: COLORS.accent,
-    backgroundColor: COLORS.accent + "30",
+    backgroundColor: COLORS.accent,
   },
   presetText: {
     color: COLORS.text,
     textAlign: "center",
-    fontWeight: "600",
-    fontSize: 13,
+    fontSize: 11,
   },
   presetTextActive: {
     color: COLORS.text,
     fontWeight: "700",
-    fontSize: 13,
+    fontSize: 11,
   },
 });
