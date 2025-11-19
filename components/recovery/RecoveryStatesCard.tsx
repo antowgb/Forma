@@ -1,5 +1,5 @@
 import { COLORS } from "constants/Colors";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 type RecoveryState = {
   muscle: string;
@@ -15,41 +15,39 @@ type RecoveryStatesCardProps = {
 export default function RecoveryStatesCard({ data }: RecoveryStatesCardProps) {
   return (
     <View style={styles.card}>
-      <ScrollView>
-        {data.map((item) => {
-          const days = Math.floor(item.hoursLeft / 24);
-          const hours = Math.round(item.hoursLeft % 24);
-          let statusText = "Ready";
+      {data.map((item) => {
+        const days = Math.floor(item.hoursLeft / 24);
+        const hours = Math.round(item.hoursLeft % 24);
+        let statusText = "Ready";
 
-          if (!item.ready && item.hoursLeft > 0) {
-            statusText =
-              days > 0 ? `${days}d ${hours}h remaining` : `${hours}h remaining`;
-          }
+        if (!item.ready && item.hoursLeft > 0) {
+          statusText =
+            days > 0 ? `${days}d ${hours}h remaining` : `${hours}h remaining`;
+        }
 
-          return (
-            <View key={item.muscle} style={styles.state}>
-              <View style={styles.rowHeader}>
-                <Text style={styles.muscle}>{item.muscle}</Text>
-                <Text style={[styles.status, item.ready && styles.ready]}>
-                  {statusText}
-                </Text>
-              </View>
-
-              <View style={styles.barBackground}>
-                <View
-                  style={[
-                    styles.barFill,
-                    {
-                      width: `${Math.round(item.progress * 100)}%`,
-                      opacity: item.ready ? 1 : 0.7,
-                    },
-                  ]}
-                />
-              </View>
+        return (
+          <View key={item.muscle} style={styles.state}>
+            <View style={styles.rowHeader}>
+              <Text style={styles.muscle}>{item.muscle}</Text>
+              <Text style={[styles.status, item.ready && styles.ready]}>
+                {statusText}
+              </Text>
             </View>
-          );
-        })}
-      </ScrollView>
+
+            <View style={styles.barBackground}>
+              <View
+                style={[
+                  styles.barFill,
+                  {
+                    width: `${Math.round(item.progress * 100)}%`,
+                    opacity: item.ready ? 1 : 0.7,
+                  },
+                ]}
+              />
+            </View>
+          </View>
+        );
+      })}
     </View>
   );
 }

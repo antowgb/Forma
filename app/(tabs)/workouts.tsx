@@ -1,7 +1,6 @@
 import { EXERCISES } from "assets/Exercises";
 import { loadFavorites, toggleFavorite } from "assets/Favorites";
 import { Exercise } from "assets/Types";
-import BannerAdView from "components/ads/Banner";
 import ScreenHeader from "components/common/ScreenHeader";
 import Filters from "components/workouts/Filters";
 import WorkoutGroups from "components/workouts/WorkoutGroups";
@@ -69,8 +68,6 @@ export default function WorkoutsScreen() {
           favorites={favorites}
           onToggle={onToggle}
         />
-
-        <BannerAdView />
       </View>
     </SafeAreaView>
   );

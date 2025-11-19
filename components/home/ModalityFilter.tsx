@@ -1,7 +1,7 @@
 import { WorkoutModality } from "assets/GenerateWorkout";
 import { pressableStyles } from "components/common/PressableStyles";
 import { COLORS } from "constants/Colors";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text } from "react-native";
 
 type ModalityFilterProps = {
   value: WorkoutModality;
@@ -19,7 +19,11 @@ export default function ModalityFilter({
   onChange,
 }: ModalityFilterProps) {
   return (
-    <View style={styles.filters}>
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.filters}
+    >
       {OPTIONS.map((option) => (
         <Pressable
           key={option.value}
@@ -40,7 +44,7 @@ export default function ModalityFilter({
           </Text>
         </Pressable>
       ))}
-    </View>
+    </ScrollView>
   );
 }
 
@@ -57,6 +61,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.accent,
     backgroundColor: COLORS.panel + "50",
+    flexShrink: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   chipActive: {
     backgroundColor: COLORS.accent,

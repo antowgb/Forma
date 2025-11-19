@@ -1,4 +1,3 @@
-import BannerAdView from "components/ads/Banner";
 import ScreenHeader from "components/common/ScreenHeader";
 import RecoveryStatesCard from "components/recovery/RecoveryStatesCard";
 import SortOptions from "components/recovery/SortOptions";
@@ -110,8 +109,6 @@ export default function RecoveryScreen() {
         />
 
         <RecoveryStatesCard data={sortedData} />
-
-        <BannerAdView />
       </View>
     </SafeAreaView>
   );
