@@ -67,8 +67,29 @@ export default function RestTimer() {
 
   return (
     <View style={styles.card}>
-
       <View style={styles.row}>
+        <View style={styles.presets}>
+          {PRESETS.map((seconds) => (
+            <Pressable
+              key={seconds}
+              onPress={() => setSelectedSeconds(seconds)}
+              style={({ pressed }) => [
+                styles.presetButton,
+                selectedSeconds === seconds && styles.presetActive,
+                pressed && pressableStyles.pressed,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.presetText,
+                  selectedSeconds === seconds && styles.presetTextActive,
+                ]}
+              >
+                {seconds}s
+              </Text>
+            </Pressable>
+          ))}
+        </View>
         <Text style={styles.timeText}>{formattedTime}</Text>
 
         <Pressable
@@ -85,28 +106,6 @@ export default function RestTimer() {
             color={COLORS.text}
           />
         </Pressable>
-      </View>
-      <View style={styles.presets}>
-        {PRESETS.map((seconds) => (
-          <Pressable
-            key={seconds}
-            onPress={() => setSelectedSeconds(seconds)}
-            style={({ pressed }) => [
-              styles.presetButton,
-              selectedSeconds === seconds && styles.presetActive,
-              pressed && pressableStyles.pressed,
-            ]}
-          >
-            <Text
-              style={[
-                styles.presetText,
-                selectedSeconds === seconds && styles.presetTextActive,
-              ]}
-            >
-              {seconds}s
-            </Text>
-          </Pressable>
-        ))}
       </View>
     </View>
   );
@@ -168,31 +167,42 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
   },
   presets: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: "column",
     gap: 8,
+    padding: 10,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: COLORS.accent + "60",
+    backgroundColor: COLORS.panel + "80",
+    shadowColor: COLORS.accent,
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 6,
+    minWidth: 96,
   },
   presetButton: {
     flex: 1,
-    borderRadius: 999,
-    paddingVertical: 4,
+    borderRadius: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     borderWidth: 1,
-    borderColor: COLORS.panel + "50",
+    borderColor: COLORS.panel + "20",
     backgroundColor: COLORS.panel,
   },
   presetActive: {
     borderColor: COLORS.accent,
-    backgroundColor: COLORS.accent + "20",
+    backgroundColor: COLORS.accent + "30",
   },
   presetText: {
     color: COLORS.text,
     textAlign: "center",
-    fontWeight: "500",
-    fontSize: 11,
+    fontWeight: "600",
+    fontSize: 13,
   },
   presetTextActive: {
     color: COLORS.text,
     fontWeight: "700",
-    fontSize: 11,
+    fontSize: 13,
   },
 });
