@@ -28,9 +28,9 @@ export function generateReps(ex: Exercise) {
 }
 
 const MAX_MUSCLES_PER_WORKOUT = 3;
-const FULL_RECOVERY_NOTICE = "Rest recommended — all muscles are recovering";
+const FULL_RECOVERY_NOTICE = "Rest recommended : all muscles are recovering";
 const NO_SLOT_NOTICE =
-  "Rest recommended — no slots available with current recovery";
+  "Rest recommended : no slots available with current recovery";
 
 type ScoredExercise = { ex: Exercise; score: number };
 
@@ -91,10 +91,10 @@ function scoreExercise(
       ? ex.modality === "both"
       : ex.modality === modality || ex.modality === "both"
   ) {
-    score += 20;
+    score += 30;
   }
-  score += Math.max(0, 20 - ex.estMinutes);
-  if (favs[ex.id]) score += 25;
+  score += Math.max(0, 25 - ex.estMinutes);
+  if (favs[ex.id]) score += 30;
   score += Math.random() * 25;
 
   return score;

@@ -119,11 +119,6 @@ export default function WorkoutList({
     );
   });
 
-  // If drag-and-drop is requested and data exists, we can consider reintroducing later.
-  if (onReorder) {
-    console.log("Reorder disabled temporarily");
-  }
-
   return (
     <ScrollView
       contentContainerStyle={styles.list}

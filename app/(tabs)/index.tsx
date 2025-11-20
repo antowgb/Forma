@@ -19,6 +19,7 @@ export default function HomeScreen() {
   const [workout, setWorkout] = useState<Exercise[]>([]);
   const [notice, setNotice] = useState("");
   const [completed, setCompleted] = useState(false);
+  const [recoveryLoaded, setRecoveryLoaded] = useState(false);
   const completionResetRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function resetCompletionState() {
@@ -30,6 +31,7 @@ export default function HomeScreen() {
   }
 
   function onGenerate(force: boolean = false) {
+    if (!recoveryLoaded) return;
     const result = getDailyWorkout(duration, {
       forceNew: force,
       modality,
@@ -41,15 +43,13 @@ export default function HomeScreen() {
 
   // ?? charger la recovery une fois au lancement, puis générer le workout du jour
   useEffect(() => {
-    loadRecovery().then(() => {
-      onGenerate();
-    });
+    loadRecovery().finally(() => setRecoveryLoaded(true));
   }, []);
 
   // ?? si tu veux un workout différent par durée le même jour, tu peux garder ça :
   useEffect(() => {
     onGenerate();
-  }, [duration, modality]);
+  }, [duration, modality, recoveryLoaded]);
 
   // ?? marquer comme complété (et sauvegarder la recovery)
   async function complete() {
@@ -118,8 +118,6 @@ export default function HomeScreen() {
       <View style={styles.container}>
         <ScreenHeader title="Forma" onReload={() => onGenerate(true)} />
 
-        {notice ? <Text style={styles.notice}>{notice}</Text> : null}
-
         {/* Choix durée */}
         <Dropdown
           label="Duration"
@@ -135,6 +133,8 @@ export default function HomeScreen() {
           options={modalityOptions}
           onSelect={setModality}
         />
+
+        {notice ? <Text style={styles.notice}>{notice}</Text> : null}
 
         {/* Workout affiché par muscle */}
         <WorkoutGroupsList groups={simpleGroups} />
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   },
   notice: {
     color: COLORS.text,
-    fontSize: 20,
+    fontSize: 12,
     marginTop: SPACING.sm,
     fontWeight: "600",
     textAlign: "center",

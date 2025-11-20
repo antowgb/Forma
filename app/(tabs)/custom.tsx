@@ -297,20 +297,6 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.sm,
     ...SHADOWS.floating,
   },
-  sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "baseline",
-  },
-  sectionTitle: {
-    color: COLORS.text,
-    fontSize: 18,
-    fontWeight: "700",
-  },
-  sectionSubtitle: {
-    color: COLORS.subtext,
-    fontSize: 12,
-  },
   badgeRow: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -366,21 +352,6 @@ const styles = StyleSheet.create({
   noteText: {
     color: COLORS.subtext,
     fontSize: 13,
-  },
-  subTitle: {
-    color: COLORS.text,
-    fontSize: 14,
-    fontWeight: "700",
-  },
-  subMeta: {
-    color: COLORS.subtext,
-    fontSize: 11,
-  },
-  overlaySubheader: {
-    flexDirection: "row",
-    gap: SPACING.sm,
-    alignItems: "baseline",
-    justifyContent: "space-between",
   },
   exerciseScroll: {
     maxHeight: 360,
