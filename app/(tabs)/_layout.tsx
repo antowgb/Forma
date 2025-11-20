@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { Tabs } from "expo-router";
 import React from "react";
 import { StyleSheet, View } from "react-native";
@@ -90,12 +91,12 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: COLORS.background,
     borderRadius: 28,
-    marginHorizontal: 20,
-    marginBottom: 22,
+    marginHorizontal: SPACING.xl,
+    marginBottom: SPACING.xxl,
     borderWidth: 1,
     borderColor: COLORS.panel,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
     height: 80,
     ...SHADOWS.floating,
   },
@@ -108,11 +109,11 @@ const styles = StyleSheet.create({
   },
 
   tabIcon: {
-    marginBottom: 4,
+    marginBottom: SPACING.xs,
   },
 
   tabLabel: {
-    marginTop: 4,
+    marginTop: SPACING.xs,
     marginBottom: 0,
     fontSize: 12,
     textAlign: "center",

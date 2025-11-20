@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { pressableStyles } from "components/common/PressableStyles";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -114,11 +115,10 @@ export default function RestTimer() {
 
 const styles = StyleSheet.create({
   card: {
-    marginVertical: 8,
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: 12,
-    padding: 12,
+    padding: SPACING.md,
     backgroundColor: COLORS.panel,
     ...SHADOWS.floating,
   },
@@ -156,12 +156,12 @@ const styles = StyleSheet.create({
   presets: {
     flexDirection: "row",
     justifyContent: "space-between",
-    gap: 8,
+    gap: SPACING.sm,
   },
   presetButton: {
     flex: 1,
     borderRadius: 999,
-    paddingVertical: 4,
+    paddingVertical: SPACING.xs,
     borderWidth: 1,
     borderColor: COLORS.border,
     backgroundColor: COLORS.panel,

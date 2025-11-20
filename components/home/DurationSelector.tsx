@@ -1,4 +1,5 @@
 import { COLORS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { pressableStyles } from "components/common/PressableStyles";
@@ -44,11 +45,11 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 8,
+    marginTop: SPACING.sm,
   },
   durationButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.md,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: COLORS.border,

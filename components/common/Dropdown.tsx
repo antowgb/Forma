@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { useState } from "react";
 import {
   Modal,
@@ -109,12 +110,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.panel,
     ...SHADOWS.floating,
     borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.md,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    gap: 8,
+    gap: SPACING.xs,
   },
   label: {
     color: COLORS.subtext,
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
   valueRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: SPACING.xs,
   },
   value: {
     color: COLORS.text,
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
     elevation: 8,
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
+    padding: SPACING.xl,
   },
   card: {
     width: "100%",
@@ -150,8 +151,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.panel,
     borderWidth: 1,
     borderColor: COLORS.border,
-    padding: 12,
-    gap: 6,
+    padding: SPACING.md,
+    gap: SPACING.sm,
     ...SHADOWS.floating,
   },
   cardLabel: {
@@ -159,11 +160,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textTransform: "uppercase",
     letterSpacing: 0.6,
-    marginBottom: 4,
+    marginBottom: SPACING.xs,
   },
   option: {
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.md,
     borderRadius: 8,
     flexDirection: "row",
     alignItems: "center",

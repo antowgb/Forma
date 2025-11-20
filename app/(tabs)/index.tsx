@@ -7,6 +7,7 @@ import RestTimer from "components/home/RestTimer";
 import WorkoutCompletionButton from "components/home/WorkoutCompletionButton";
 import WorkoutGroupsList from "components/home/WorkoutGroupsList";
 import { COLORS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -153,13 +154,13 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    gap: 8,
+    padding: SPACING.xl,
+    gap: SPACING.md,
   },
   notice: {
     color: COLORS.text,
     fontSize: 20,
-    marginTop: 10,
+    marginTop: SPACING.sm,
     fontWeight: "600",
     textAlign: "center",
   },

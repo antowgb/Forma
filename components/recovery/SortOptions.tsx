@@ -1,4 +1,5 @@
 import { COLORS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { pressableStyles } from "components/common/PressableStyles";
@@ -49,12 +50,12 @@ const styles = StyleSheet.create({
   sortRow: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8,
-    marginBottom: 8,
+    gap: SPACING.sm,
+    marginBottom: SPACING.sm,
   },
   sortChip: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
     borderRadius: 999,
     borderWidth: 1,
     borderColor: COLORS.border,

@@ -4,6 +4,7 @@ import { Exercise } from "assets/Types";
 import Dropdown, { DropdownOption } from "components/common/Dropdown";
 import { pressableStyles } from "components/common/PressableStyles";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { useMemo, useRef, useState } from "react";
 import {
   Alert,
@@ -228,7 +229,7 @@ export default function WorkoutBuilder({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 12,
+    gap: SPACING.md,
   },
   input: {
     borderWidth: 1,
@@ -236,8 +237,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.panel,
     ...SHADOWS.floating,
     borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.md,
     color: COLORS.text,
     fontSize: 14,
   },
@@ -248,8 +249,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.panel,
     ...SHADOWS.floating,
     borderRadius: 12,
-    padding: 12,
-    gap: 8,
+    padding: SPACING.md,
+    gap: SPACING.sm,
   },
   sectionLabel: {
     color: COLORS.subtext,
@@ -263,8 +264,8 @@ const styles = StyleSheet.create({
   selectionRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-    paddingVertical: 6,
+    gap: SPACING.sm,
+    paddingVertical: SPACING.sm,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: COLORS.border,
   },
@@ -282,33 +283,33 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: 999,
-    padding: 6,
+    padding: SPACING.sm,
   },
   groupsCard: {
-    marginVertical: 4,
+    marginVertical: SPACING.xs,
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: 12,
-    padding: 12,
+    padding: SPACING.md,
     height: 250,
     backgroundColor: COLORS.panel,
     ...SHADOWS.floating,
-    gap: 6,
+    gap: SPACING.sm,
   },
   group: {
-    marginBottom: 12,
+    marginBottom: SPACING.md,
   },
   muscleTitle: {
     color: COLORS.text,
     fontSize: 18,
     fontWeight: "700",
-    marginBottom: 4,
+    marginBottom: SPACING.xs,
   },
   exerciseRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 6,
+    paddingVertical: SPACING.sm,
   },
   exerciseName: {
     color: COLORS.text,
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
   saveButton: {
     backgroundColor: COLORS.accent,
     borderRadius: 12,
-    padding: 12,
+    padding: SPACING.md,
     alignItems: "center",
     justifyContent: "center",
     ...SHADOWS.floating,

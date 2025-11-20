@@ -12,6 +12,7 @@ import { useRouter } from "expo-router";
 import { useCallback } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { SPACING } from "constants/Spacing";
 
 export default function CreateCustomWorkoutScreen() {
   const router = useRouter();
@@ -52,7 +53,7 @@ export default function CreateCustomWorkoutScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    gap: 20,
+    padding: SPACING.xl,
+    gap: SPACING.lg,
   },
 });

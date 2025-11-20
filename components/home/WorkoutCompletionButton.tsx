@@ -1,4 +1,5 @@
 import { COLORS, SHADOWS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { Pressable, StyleSheet, Text } from "react-native";
 
 import { pressableStyles } from "components/common/PressableStyles";
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
   done: {
     backgroundColor: COLORS.accent,
     borderRadius: 12,
-    padding: 12,
+    padding: SPACING.md,
     alignItems: "center",
     justifyContent: "center",
     ...SHADOWS.floating,

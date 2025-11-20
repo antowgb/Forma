@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { pressableStyles } from "components/common/PressableStyles";
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
   iconButton: {
-    padding: 8,
+    padding: SPACING.sm,
     borderRadius: 999,
     backgroundColor: COLORS.accent,
     shadowColor: COLORS.accent,

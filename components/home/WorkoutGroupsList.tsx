@@ -1,6 +1,7 @@
 import { generateReps } from "assets/GenerateWorkout";
 import { Exercise } from "assets/Types";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 type WorkoutGroupsListProps = {
@@ -29,27 +30,26 @@ export default function WorkoutGroupsList({ groups }: WorkoutGroupsListProps) {
 
 const styles = StyleSheet.create({
   exerciseList: {
-    marginVertical: 4,
     height: 300,
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: 12,
-    padding: 12,
+    padding: SPACING.md,
     backgroundColor: COLORS.panel,
     ...SHADOWS.floating,
   },
   group: {
-    marginBottom: 14,
+    marginBottom: SPACING.lg,
   },
   muscleTitle: {
     color: COLORS.text,
     fontSize: 20,
     fontWeight: "700",
-    marginBottom: 6,
+    marginBottom: SPACING.sm,
   },
   item: {
     color: COLORS.text,
     fontSize: 16,
-    marginVertical: 2,
+    marginVertical: SPACING.xs,
   },
 });

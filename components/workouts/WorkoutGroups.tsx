@@ -1,6 +1,7 @@
 import { generateReps } from "assets/GenerateWorkout";
 import { Exercise } from "assets/Types";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { pressableStyles } from "components/common/PressableStyles";
@@ -63,29 +64,29 @@ export default function WorkoutGroups({
 
 const styles = StyleSheet.create({
   card: {
-    marginVertical: 12,
+    marginVertical: SPACING.md,
     maxHeight: "70%",
     flex: 1,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: COLORS.border,
     backgroundColor: COLORS.panel,
-    padding: 16,
+    padding: SPACING.lg,
     ...SHADOWS.floating,
   },
   section: {
-    marginBottom: 16,
+    marginBottom: SPACING.lg,
   },
   muscleTitle: {
     color: COLORS.text,
     fontSize: 18,
     fontWeight: "700",
-    marginBottom: 6,
+    marginBottom: SPACING.sm,
   },
   exerciseRow: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 4,
+    paddingVertical: SPACING.xs,
   },
   exerciseInfo: {
     flex: 1,
@@ -100,8 +101,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   favoriteButton: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: SPACING.xs,
     borderRadius: 12,
     backgroundColor: COLORS.panel,
     borderWidth: 1,

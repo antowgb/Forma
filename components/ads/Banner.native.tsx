@@ -7,6 +7,7 @@ import React, {
   useState,
 } from "react";
 import { NativeModules, View } from "react-native";
+import { SPACING } from "constants/Spacing";
 
 const getTurboModule = (
   globalThis as typeof globalThis & {
@@ -134,7 +135,9 @@ export default function BannerAdView() {
   const bannerKey = `${adUnitId}-${adSizeMode}-${reloadToken}`;
 
   return (
-    <View style={{ alignItems: "center", marginTop: 8, width: "100%" }}>
+    <View
+      style={{ alignItems: "center", marginTop: SPACING.sm, width: "100%" }}
+    >
       <BannerAd
         key={bannerKey}
         unitId={adUnitId}

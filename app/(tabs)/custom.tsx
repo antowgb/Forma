@@ -9,6 +9,7 @@ import ScreenHeader from "components/common/ScreenHeader";
 import WorkoutList from "components/custom/WorkoutList";
 import { CustomWorkout } from "components/custom/types";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
@@ -277,23 +278,23 @@ export default function CustomScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    padding: 20,
-    gap: 20,
-    paddingBottom: 16,
+    padding: SPACING.xl,
+    gap: SPACING.lg,
+    paddingBottom: SPACING.lg,
   },
   listContainer: {
     borderColor: COLORS.border,
     borderWidth: 1,
-    borderRadius: 16,
+    borderRadius: 20,
     backgroundColor: COLORS.panel + "90",
     height: "80%",
     flexGrow: 0,
     flexShrink: 0,
     alignSelf: "stretch",
-    paddingHorizontal: 6,
-    paddingTop: 6,
-    paddingBottom: 8,
-    marginBottom: 8,
+    paddingHorizontal: SPACING.sm,
+    paddingTop: SPACING.sm,
+    paddingBottom: SPACING.sm,
+    marginBottom: SPACING.sm,
     ...SHADOWS.floating,
   },
   sectionHeader: {
@@ -313,14 +314,14 @@ const styles = StyleSheet.create({
   badgeRow: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 6,
+    gap: SPACING.sm,
   },
   badge: {
     borderRadius: 999,
     borderWidth: 1,
     borderColor: COLORS.border,
-    paddingHorizontal: 10,
-    paddingVertical: 2,
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: SPACING.xs,
     backgroundColor: COLORS.panel + "90",
   },
   badgeText: {
@@ -332,13 +333,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#000000aa",
     justifyContent: "center",
-    padding: 20,
+    padding: SPACING.xl,
   },
   overlayCard: {
     borderRadius: 18,
     backgroundColor: COLORS.panel,
-    padding: 18,
-    gap: 14,
+    padding: SPACING.lg,
+    gap: SPACING.lg,
     borderWidth: 1,
     borderColor: COLORS.border,
     maxHeight: "90%",
@@ -346,7 +347,7 @@ const styles = StyleSheet.create({
   overlayHeader: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
+    gap: SPACING.md,
   },
   overlayTitle: {
     color: COLORS.text,
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
   },
   overlaySubheader: {
     flexDirection: "row",
-    gap: 10,
+    gap: SPACING.sm,
     alignItems: "baseline",
     justifyContent: "space-between",
   },
@@ -385,13 +386,13 @@ const styles = StyleSheet.create({
     maxHeight: 360,
   },
   exerciseList: {
-    gap: 12,
-    paddingBottom: 6,
+    gap: SPACING.md,
+    paddingBottom: SPACING.sm,
     height: "70%",
   },
   exerciseRow: {
     flexDirection: "row",
-    gap: 12,
+    gap: SPACING.md,
     alignItems: "center",
   },
   exerciseIndex: {
@@ -419,16 +420,16 @@ const styles = StyleSheet.create({
   },
   overlayActions: {
     flexDirection: "row",
-    gap: 12,
+    gap: SPACING.md,
   },
   actionButton: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
+    gap: SPACING.sm,
     borderRadius: 12,
-    paddingVertical: 12,
+    paddingVertical: SPACING.md,
     borderWidth: 1,
     borderColor: COLORS.border,
   },

@@ -1,4 +1,5 @@
 import { COLORS, SHADOWS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { StyleSheet, Text, View } from "react-native";
 
 type RecoveryState = {
@@ -54,23 +55,23 @@ export default function RecoveryStatesCard({ data }: RecoveryStatesCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    marginVertical: 12,
+    marginVertical: SPACING.md,
     maxHeight: "70%",
     flex: 1,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: COLORS.border,
     backgroundColor: COLORS.panel,
-    padding: 16,
+    padding: SPACING.lg,
     ...SHADOWS.floating,
   },
   state: {
-    marginBottom: 14,
+    marginBottom: SPACING.lg,
   },
   rowHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 15,
+    marginVertical: SPACING.lg,
   },
   muscle: {
     color: COLORS.text,

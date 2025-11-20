@@ -1,6 +1,7 @@
 import { WorkoutModality } from "assets/GenerateWorkout";
 import { pressableStyles } from "components/common/PressableStyles";
 import { COLORS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { Pressable, View, StyleSheet, Text } from "react-native";
 
 type ModalityFilterProps = {
@@ -47,12 +48,12 @@ export default function ModalityFilter({
 const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
-    gap: 6,
-    marginTop: 8,
+    gap: SPACING.xs,
+    marginTop: SPACING.xs,
   },
   chip: {
-    paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingVertical: SPACING.xs,
+    paddingHorizontal: SPACING.md,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: COLORS.border,

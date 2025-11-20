@@ -8,6 +8,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { SPACING } from "constants/Spacing";
 
 const MUSCLES = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core"] as const;
 type FilterMode = "all" | "weight lifting" | "calisthenics";
@@ -86,7 +87,7 @@ export default function WorkoutsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    gap: 12,
+    padding: SPACING.xl,
+    gap: SPACING.lg,
   },
 });

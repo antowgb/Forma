@@ -6,6 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { SPACING } from "constants/Spacing";
 
 import {
   _getRecoveryMap,
@@ -140,7 +141,7 @@ export default function RecoveryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    gap: 12,
+    padding: SPACING.xl,
+    gap: SPACING.lg,
   },
 });

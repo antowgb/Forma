@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Exercise } from "assets/Types";
 import { pressableStyles } from "components/common/PressableStyles";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { SPACING } from "constants/Spacing";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { CustomWorkout } from "./types";
 
@@ -142,24 +143,24 @@ const styles = StyleSheet.create({
   },
   list: {
     flexGrow: 1,
-    gap: 20,
-    paddingBottom: 32,
-    paddingHorizontal: 6,
-    paddingTop: 4,
+    gap: SPACING.xl,
+    paddingBottom: SPACING.xxxl,
+    paddingHorizontal: SPACING.sm,
+    paddingTop: SPACING.xs,
   },
   workoutCard: {
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: 16,
-    padding: 12,
-    gap: 12,
+    padding: SPACING.md,
+    gap: SPACING.md,
     backgroundColor: COLORS.panel,
     ...SHADOWS.floating,
   },
   workoutHeader: {
     flexDirection: "row",
     alignItems: "flex-start",
-    gap: 8,
+    gap: SPACING.sm,
   },
   workoutTitle: {
     color: COLORS.text,
@@ -169,14 +170,14 @@ const styles = StyleSheet.create({
   badgeRow: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 6,
+    gap: SPACING.sm,
   },
   badge: {
     borderRadius: 999,
     borderWidth: 1,
     borderColor: COLORS.border,
-    paddingHorizontal: 10,
-    paddingVertical: 2,
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: SPACING.xs,
     backgroundColor: COLORS.panel + "90",
   },
   badgeText: {
@@ -192,7 +193,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    gap: 12,
+    gap: SPACING.md,
   },
   previewText: {
     color: COLORS.subtext,
@@ -200,11 +201,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   separator: {
-    height: 16,
+    height: SPACING.lg,
   },
   reorder: {
     flexDirection: "row",
-    gap: 6,
+    gap: SPACING.sm,
   },
   reorderButton: {
     width: 28,
@@ -223,9 +224,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: 16,
-    padding: 24,
+    padding: SPACING.xxl,
     alignItems: "center",
-    gap: 8,
+    gap: SPACING.sm,
     backgroundColor: COLORS.panel,
     ...SHADOWS.floating,
   },
