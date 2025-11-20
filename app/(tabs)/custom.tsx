@@ -388,7 +388,8 @@ const styles = StyleSheet.create({
   exerciseList: {
     gap: SPACING.md,
     paddingBottom: SPACING.sm,
-    height: "70%",
+    paddingVertical: SPACING.sm,
+    flexGrow: 0,
   },
   exerciseRow: {
     flexDirection: "row",

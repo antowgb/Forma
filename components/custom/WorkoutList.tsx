@@ -139,7 +139,7 @@ export default function WorkoutList({
 const styles = StyleSheet.create({
   listWrapper: {
     flex: 1,
-    height: "70%",
+    minHeight: 0,
   },
   list: {
     flexGrow: 1,
