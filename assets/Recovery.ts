@@ -79,12 +79,23 @@ export async function loadRecovery() {
     const raw = await AsyncStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      recoveryMap = Object.fromEntries(
+      const incoming = Object.fromEntries(
         Object.entries(parsed).map(([muscle, entry]) => [
           muscle,
           normalizeEntry(muscle, entry),
         ])
       );
+
+      // Merge with in-memory state to avoid clobbering recent updates when
+      // load completes after a "mark complete" action.
+      const merged: RecoveryMap = { ...recoveryMap };
+      Object.entries(incoming).forEach(([muscle, entry]) => {
+        const current = merged[muscle];
+        if (!current || entry.end > current.end) {
+          merged[muscle] = entry;
+        }
+      });
+      recoveryMap = merged;
     }
   } catch (error) {
     console.log("Error loading recovery:", error);

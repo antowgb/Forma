@@ -200,13 +200,6 @@ export default function CustomScreen() {
                   <Text style={styles.noteText}>{selectedWorkout.notes}</Text>
                 ) : null}
 
-                <View style={styles.overlaySubheader}>
-                  <Text style={styles.subTitle}>Exercises</Text>
-                  <Text style={styles.subMeta}>
-                    Scroll to view the full workout
-                  </Text>
-                </View>
-
                 <ScrollView
                   style={styles.exerciseScroll}
                   contentContainerStyle={styles.exerciseList}
@@ -252,7 +245,6 @@ export default function CustomScreen() {
                       }
                     }}
                   >
-                    <Ionicons name="trash" size={16} color={COLORS.text} />
                     <Text style={styles.actionText}>Delete</Text>
                   </Pressable>
                   <Pressable
@@ -265,11 +257,6 @@ export default function CustomScreen() {
                       selectedWorkout && handleMarkComplete(selectedWorkout)
                     }
                   >
-                    <Ionicons
-                      name="checkmark-done"
-                      size={18}
-                      color={COLORS.text}
-                    />
                     <Text style={styles.actionText}>Mark complete</Text>
                   </Pressable>
                 </View>

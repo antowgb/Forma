@@ -88,12 +88,13 @@ const styles = StyleSheet.create({
   barBackground: {
     height: 8,
     borderRadius: 999,
-    backgroundColor: COLORS.border,
+    backgroundColor: COLORS.subtext + "40", // muted track so progress is visible
     overflow: "hidden",
   },
   barFill: {
     height: "100%",
     borderRadius: 999,
     backgroundColor: COLORS.accent,
+    opacity: 0.9,
   },
 });

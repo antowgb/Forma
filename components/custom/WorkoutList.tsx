@@ -1,13 +1,7 @@
 import { Exercise } from "assets/Types";
 import { pressableStyles } from "components/common/PressableStyles";
 import { COLORS, SHADOWS } from "constants/Colors";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { CustomWorkout } from "./types";
 
 type WorkoutListProps = {
@@ -65,34 +59,6 @@ export default function WorkoutList({
                 <Text style={styles.workoutTitle}>{workout.title}</Text>
               </View>
             </View>
-
-            {(workout.focus || workout.intensity || workout.estDuration) && (
-              <View style={styles.badgeRow}>
-                {workout.focus && (
-                  <View style={styles.badge}>
-                    <Text style={styles.badgeText}>{workout.focus}</Text>
-                  </View>
-                )}
-                {workout.intensity && (
-                  <View style={styles.badge}>
-                    <Text style={styles.badgeText}>{workout.intensity}</Text>
-                  </View>
-                )}
-                {workout.estDuration && (
-                  <View style={styles.badge}>
-                    <Text style={styles.badgeText}>
-                      {workout.estDuration} min
-                    </Text>
-                  </View>
-                )}
-              </View>
-            )}
-
-            {workout.notes && (
-              <Text style={styles.noteText} numberOfLines={2}>
-                {workout.notes}
-              </Text>
-            )}
 
             <View style={styles.previewRow}>
               <Text style={styles.previewText} numberOfLines={1}>

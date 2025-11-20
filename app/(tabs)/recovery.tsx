@@ -1,8 +1,9 @@
+import { useFocusEffect } from "@react-navigation/native";
 import Dropdown, { DropdownOption } from "components/common/Dropdown";
 import ScreenHeader from "components/common/ScreenHeader";
 import RecoveryStatesCard from "components/recovery/RecoveryStatesCard";
 import { LinearGradient } from "expo-linear-gradient";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -28,6 +29,8 @@ const SORT_OPTIONS: DropdownOption<SortMode>[] = [
   { value: "alpha", label: "A - Z" },
   { value: "readySoon", label: "Ready Soon" },
 ];
+
+const REFRESH_INTERVAL_MS = 30_000;
 
 function computeRecovery(muscle: string): RecoveryInfo {
   const entry = _getRecoveryMap()[muscle];
@@ -69,10 +72,29 @@ export default function RecoveryScreen() {
   const [sortMode, setSortMode] = useState<SortMode>("alpha");
   const refreshData = useCallback(() => setData(buildRecoverySnapshot()), []);
 
-  // Charger la recovery au montage
-  useEffect(() => {
-    loadRecovery().then(() => refreshData());
-  }, [refreshData]);
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      loadRecovery().then(() => {
+        if (active) {
+          refreshData();
+        }
+      });
+
+      return () => {
+        active = false;
+      };
+    }, [refreshData])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      const id = setInterval(() => {
+        refreshData();
+      }, REFRESH_INTERVAL_MS);
+      return () => clearInterval(id);
+    }, [refreshData])
+  );
 
   async function onReset() {
     await resetRecovery();
