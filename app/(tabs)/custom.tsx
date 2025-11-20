@@ -8,7 +8,7 @@ import { pressableStyles } from "components/common/PressableStyles";
 import ScreenHeader from "components/common/ScreenHeader";
 import WorkoutList from "components/custom/WorkoutList";
 import { CustomWorkout } from "components/custom/types";
-import { COLORS } from "constants/Colors";
+import { COLORS, SHADOWS } from "constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
@@ -80,6 +80,13 @@ export default function CustomScreen() {
     setSelectedWorkout(workout);
   }, []);
 
+  const handleReorder = useCallback(
+    async (next: CustomWorkout[]) => {
+      await persist(next);
+    },
+    [persist]
+  );
+
   const handleCloseOverlay = useCallback(() => setSelectedWorkout(null), []);
 
   const handleMarkComplete = useCallback(
@@ -119,25 +126,23 @@ export default function CustomScreen() {
         style={{ flex: 1 }}
         behavior={Platform.select({ ios: "padding", android: undefined })}
       >
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={styles.screen}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-        >
+        <View style={styles.screen}>
           <ScreenHeader
             title="Custom"
             actionIcon="add"
             onActionPress={() => router.push("/create")}
           />
 
-          <WorkoutList
-            workouts={workouts}
-            loading={loading}
-            exerciseMap={lookup}
-            onSelect={handleSelectWorkout}
-          />
-        </ScrollView>
+          <View style={styles.listContainer}>
+            <WorkoutList
+              workouts={workouts}
+              loading={loading}
+              exerciseMap={lookup}
+              onSelect={handleSelectWorkout}
+              onReorder={handleReorder}
+            />
+          </View>
+        </View>
       </KeyboardAvoidingView>
 
       <Modal
@@ -271,10 +276,25 @@ export default function CustomScreen() {
 
 const styles = StyleSheet.create({
   screen: {
-    flexGrow: 1,
+    flex: 1,
     padding: 20,
     gap: 20,
-    paddingBottom: 32,
+    paddingBottom: 16,
+  },
+  listContainer: {
+    borderColor: COLORS.border,
+    borderWidth: 1,
+    borderRadius: 16,
+    backgroundColor: COLORS.panel + "90",
+    height: "80%",
+    flexGrow: 0,
+    flexShrink: 0,
+    alignSelf: "stretch",
+    paddingHorizontal: 6,
+    paddingTop: 6,
+    paddingBottom: 8,
+    marginBottom: 8,
+    ...SHADOWS.floating,
   },
   sectionHeader: {
     flexDirection: "row",
@@ -367,6 +387,7 @@ const styles = StyleSheet.create({
   exerciseList: {
     gap: 12,
     paddingBottom: 6,
+    height: "70%",
   },
   exerciseRow: {
     flexDirection: "row",

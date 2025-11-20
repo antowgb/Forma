@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { Exercise } from "assets/Types";
 import { pressableStyles } from "components/common/PressableStyles";
 import { COLORS, SHADOWS } from "constants/Colors";
@@ -9,6 +10,7 @@ type WorkoutListProps = {
   loading: boolean;
   exerciseMap: Record<string, Exercise>;
   onSelect: (workout: CustomWorkout) => void;
+  onReorder?: (next: CustomWorkout[]) => void;
 };
 
 export default function WorkoutList({
@@ -16,7 +18,18 @@ export default function WorkoutList({
   loading,
   exerciseMap,
   onSelect,
+  onReorder,
 }: WorkoutListProps) {
+  const handleMove = (index: number, direction: -1 | 1) => {
+    if (!onReorder) return;
+    const nextIndex = index + direction;
+    if (nextIndex < 0 || nextIndex >= workouts.length) return;
+    const next = [...workouts];
+    const [moved] = next.splice(index, 1);
+    next.splice(nextIndex, 0, moved);
+    onReorder(next);
+  };
+
   if (loading) {
     return (
       <View style={styles.stateCard}>
@@ -33,54 +46,112 @@ export default function WorkoutList({
     );
   }
 
+  const cards = workouts.map((item) => {
+    const index = workouts.findIndex((w) => w.id === item.id);
+    const canMoveUp = index > 0;
+    const canMoveDown = index < workouts.length - 1;
+
+    const muscles: string[] = [];
+    item.exercises.forEach((entry) => {
+      const muscle = exerciseMap[entry.exerciseId]?.muscle;
+      if (muscle && !muscles.includes(muscle)) {
+        muscles.push(muscle);
+      }
+    });
+    const preview = muscles.slice(0, 3).join(" - ");
+
+    return (
+      <Pressable
+        key={item.id}
+        onPress={() => onSelect(item)}
+        style={({ pressed }) => [
+          styles.workoutCard,
+          pressed && pressableStyles.pressed,
+        ]}
+      >
+        <View style={styles.workoutHeader}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.workoutTitle}>{item.title}</Text>
+          </View>
+        </View>
+
+        <View style={styles.previewRow}>
+          <Text style={styles.previewText} numberOfLines={1}>
+            {preview || "Tap to view exercises"}
+          </Text>
+          {onReorder ? (
+            <View style={styles.reorder}>
+              <Pressable
+                disabled={!canMoveUp}
+                onPress={() => handleMove(index, -1)}
+                style={({ pressed }) => [
+                  styles.reorderButton,
+                  !canMoveUp && styles.reorderDisabled,
+                  pressed && pressableStyles.pressed,
+                ]}
+              >
+                <Ionicons
+                  name="arrow-up"
+                  size={14}
+                  color={canMoveUp ? COLORS.text : COLORS.subtext}
+                />
+              </Pressable>
+              <Pressable
+                disabled={!canMoveDown}
+                onPress={() => handleMove(index, 1)}
+                style={({ pressed }) => [
+                  styles.reorderButton,
+                  !canMoveDown && styles.reorderDisabled,
+                  pressed && pressableStyles.pressed,
+                ]}
+              >
+                <Ionicons
+                  name="arrow-down"
+                  size={14}
+                  color={canMoveDown ? COLORS.text : COLORS.subtext}
+                />
+              </Pressable>
+            </View>
+          ) : null}
+        </View>
+      </Pressable>
+    );
+  });
+
+  // If drag-and-drop is requested and data exists, we can consider reintroducing later.
+  if (onReorder) {
+    console.log("Reorder disabled temporarily");
+  }
+
   return (
     <ScrollView
       contentContainerStyle={styles.list}
+      style={styles.listWrapper}
       showsVerticalScrollIndicator={false}
       nestedScrollEnabled
     >
-      {workouts.map((workout) => {
-        const preview = workout.exercises
-          .slice(0, 3)
-          .map((entry) => exerciseMap[entry.exerciseId]?.name ?? "Exercise")
-          .join(" - ");
-
-        return (
-          <Pressable
-            key={workout.id}
-            onPress={() => onSelect(workout)}
-            style={({ pressed }) => [
-              styles.workoutCard,
-              pressed && pressableStyles.pressed,
-            ]}
-          >
-            <View style={styles.workoutHeader}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.workoutTitle}>{workout.title}</Text>
-              </View>
-            </View>
-
-            <View style={styles.previewRow}>
-              <Text style={styles.previewText} numberOfLines={1}>
-                {preview || "Tap to view exercises"}
-              </Text>
-            </View>
-          </Pressable>
-        );
-      })}
+      {cards}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  listWrapper: {
+    flex: 1,
+    height: "70%",
+  },
   list: {
-    gap: 16,
+    flexGrow: 1,
+    gap: 20,
+    paddingBottom: 32,
+    paddingHorizontal: 6,
+    paddingTop: 4,
   },
   workoutCard: {
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: 16,
-    padding: 16,
+    padding: 12,
     gap: 12,
     backgroundColor: COLORS.panel,
     ...SHADOWS.floating,
@@ -127,6 +198,26 @@ const styles = StyleSheet.create({
     color: COLORS.subtext,
     fontSize: 12,
     flex: 1,
+  },
+  separator: {
+    height: 16,
+  },
+  reorder: {
+    flexDirection: "row",
+    gap: 6,
+  },
+  reorderButton: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: COLORS.panel,
+  },
+  reorderDisabled: {
+    opacity: 0.4,
   },
   stateCard: {
     borderWidth: 1,

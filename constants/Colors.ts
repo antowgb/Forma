@@ -11,7 +11,7 @@ export const SHADOWS = {
   floating: {
     shadowColor: COLORS.accent, // ton accent rouge
     shadowOpacity: 0.25,
-    shadowRadius: 22,
+    shadowRadius: 8,
     shadowOffset: { width: 0, height: 4 },
     elevation: 8,
   },
