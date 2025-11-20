@@ -1,4 +1,4 @@
-import { COLORS } from "constants/Colors";
+import { COLORS, SHADOWS } from "constants/Colors";
 import { StyleSheet, Text, View } from "react-native";
 
 type RecoveryState = {
@@ -59,14 +59,10 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: COLORS.accent,
-    backgroundColor: COLORS.panel + "55",
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.panel,
     padding: 16,
-    shadowColor: COLORS.accent,
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
-    shadowOffset: { width: 0, height: 12 },
-    elevation: 12,
+    ...SHADOWS.floating,
   },
   state: {
     marginBottom: 14,
@@ -92,7 +88,7 @@ const styles = StyleSheet.create({
   barBackground: {
     height: 8,
     borderRadius: 999,
-    backgroundColor: COLORS.panel,
+    backgroundColor: COLORS.border,
     overflow: "hidden",
   },
   barFill: {

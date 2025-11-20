@@ -1,7 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import type { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
-import { PlatformPressable } from "@react-navigation/elements";
-import { COLORS } from "constants/Colors";
+import { COLORS, SHADOWS } from "constants/Colors";
 import { Tabs } from "expo-router";
 import React from "react";
 import { StyleSheet, View } from "react-native";
@@ -90,20 +88,16 @@ const styles = StyleSheet.create({
 
   tabBar: {
     position: "absolute",
-    backgroundColor: "rgba(11, 15, 18, 0.95)",
+    backgroundColor: COLORS.background,
     borderRadius: 28,
     marginHorizontal: 20,
     marginBottom: 22,
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.06)",
+    borderColor: COLORS.panel,
     paddingHorizontal: 12,
     paddingVertical: 6,
     height: 80,
-    shadowColor: COLORS.accent,
-    shadowOpacity: 0.35,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 16,
+    ...SHADOWS.floating,
   },
 
   tabItem: {

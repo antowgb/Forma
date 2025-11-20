@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS } from "constants/Colors";
+import { COLORS, SHADOWS } from "constants/Colors";
 import { useState } from "react";
 import {
   Modal,
@@ -105,13 +105,9 @@ export default function Dropdown<T extends string | number>({
 const styles = StyleSheet.create({
   trigger: {
     borderWidth: 1,
-    borderColor: COLORS.accent,
-    backgroundColor: COLORS.panel + "50",
-    shadowColor: COLORS.accent,
-    shadowOpacity: 0.35,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 12,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.panel,
+    ...SHADOWS.floating,
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
@@ -139,11 +135,11 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: COLORS.panel + "50",
-    shadowColor: COLORS.accent,
-    shadowOpacity: 0.15,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 12,
+    shadowColor: COLORS.background,
+    shadowOpacity: 0.2,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 8,
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
@@ -153,9 +149,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: COLORS.panel,
     borderWidth: 1,
-    borderColor: COLORS.accent,
+    borderColor: COLORS.border,
     padding: 12,
     gap: 6,
+    ...SHADOWS.floating,
   },
   cardLabel: {
     color: COLORS.subtext,

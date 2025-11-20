@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: COLORS.accent,
-    backgroundColor: COLORS.panel + "50",
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.panel,
   },
   chipActive: {
     backgroundColor: COLORS.accent,

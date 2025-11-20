@@ -1,6 +1,6 @@
 import { generateReps } from "assets/GenerateWorkout";
 import { Exercise } from "assets/Types";
-import { COLORS } from "constants/Colors";
+import { COLORS, SHADOWS } from "constants/Colors";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { pressableStyles } from "components/common/PressableStyles";
@@ -68,14 +68,10 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: COLORS.accent,
-    backgroundColor: COLORS.panel + "55",
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.panel,
     padding: 16,
-    shadowColor: COLORS.accent,
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
-    shadowOffset: { width: 0, height: 12 },
-    elevation: 12,
+    ...SHADOWS.floating,
   },
   section: {
     marginBottom: 16,
@@ -107,12 +103,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    backgroundColor: COLORS.panel + "30",
-    shadowColor: COLORS.accent,
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 5 },
-    elevation: 8,
+    backgroundColor: COLORS.panel,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    ...SHADOWS.floating,
   },
   favoriteIcon: {
     color: COLORS.accent,

@@ -1,4 +1,4 @@
-import { COLORS } from "constants/Colors";
+import { COLORS, SHADOWS } from "constants/Colors";
 import { Pressable, StyleSheet, Text } from "react-native";
 
 import { pressableStyles } from "components/common/PressableStyles";
@@ -20,10 +20,7 @@ export default function WorkoutCompletionButton({
 
   return (
     <Pressable
-      style={({ pressed }) => [
-        styles.done,
-        pressed && pressableStyles.pressed,
-      ]}
+      style={({ pressed }) => [styles.done, pressed && pressableStyles.pressed]}
       onPress={onComplete}
     >
       <Text style={styles.generateText}>
@@ -39,11 +36,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     alignItems: "center",
-    shadowColor: COLORS.accent,
-    shadowOpacity: 0.45,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 10,
+    justifyContent: "center",
+    ...SHADOWS.floating,
   },
   generateText: {
     fontSize: 20,

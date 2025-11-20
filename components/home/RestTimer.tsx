@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { pressableStyles } from "components/common/PressableStyles";
-import { COLORS } from "constants/Colors";
+import { COLORS, SHADOWS } from "constants/Colors";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -116,15 +116,11 @@ const styles = StyleSheet.create({
   card: {
     marginVertical: 8,
     borderWidth: 1,
-    borderColor: COLORS.accent,
+    borderColor: COLORS.border,
     borderRadius: 12,
     padding: 12,
-    backgroundColor: COLORS.panel + "50",
-    shadowColor: COLORS.accent,
-    shadowOpacity: 0.35,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 12,
+    backgroundColor: COLORS.panel,
+    ...SHADOWS.floating,
   },
   header: {
     flexDirection: "row",
@@ -167,8 +163,8 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     paddingVertical: 4,
     borderWidth: 1,
-    borderColor: COLORS.accent,
-    backgroundColor: COLORS.accent + "20",
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.panel,
   },
   presetActive: {
     backgroundColor: COLORS.accent,

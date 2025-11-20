@@ -1,11 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { WorkoutModality } from "assets/GenerateWorkout";
 import { Exercise } from "assets/Types";
-import Dropdown, {
-  DropdownOption,
-} from "components/common/Dropdown";
+import Dropdown, { DropdownOption } from "components/common/Dropdown";
 import { pressableStyles } from "components/common/PressableStyles";
-import { COLORS } from "constants/Colors";
+import { COLORS, SHADOWS } from "constants/Colors";
 import { useMemo, useRef, useState } from "react";
 import {
   Alert,
@@ -234,13 +232,9 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: COLORS.accent,
-    backgroundColor: COLORS.panel + "50",
-    shadowColor: COLORS.accent,
-    shadowOpacity: 0.25,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 12,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.panel,
+    ...SHADOWS.floating,
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
@@ -250,13 +244,9 @@ const styles = StyleSheet.create({
   selectedBlock: {
     height: 150,
     borderWidth: 1,
-    borderColor: COLORS.accent,
-    backgroundColor: COLORS.panel + "50",
-    shadowColor: COLORS.accent,
-    shadowOpacity: 0.25,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 12,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.panel,
+    ...SHADOWS.floating,
     borderRadius: 12,
     padding: 12,
     gap: 8,
@@ -297,16 +287,12 @@ const styles = StyleSheet.create({
   groupsCard: {
     marginVertical: 4,
     borderWidth: 1,
-    borderColor: COLORS.accent,
+    borderColor: COLORS.border,
     borderRadius: 12,
     padding: 12,
     height: 250,
-    backgroundColor: COLORS.panel + "50",
-    shadowColor: COLORS.accent,
-    shadowOpacity: 0.25,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 12,
+    backgroundColor: COLORS.panel,
+    ...SHADOWS.floating,
     gap: 6,
   },
   group: {
@@ -334,17 +320,19 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   saveButton: {
-    borderRadius: 999,
-    paddingVertical: 12,
     backgroundColor: COLORS.accent,
+    borderRadius: 12,
+    padding: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    ...SHADOWS.floating,
   },
   saveButtonDisabled: {
     opacity: 0.5,
   },
   saveLabel: {
+    fontSize: 18,
     color: COLORS.text,
-    fontSize: 15,
     fontWeight: "700",
-    textAlign: "center",
   },
 });

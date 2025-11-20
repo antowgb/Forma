@@ -1,6 +1,6 @@
 import { generateReps } from "assets/GenerateWorkout";
 import { Exercise } from "assets/Types";
-import { COLORS } from "constants/Colors";
+import { COLORS, SHADOWS } from "constants/Colors";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 type WorkoutGroupsListProps = {
@@ -32,15 +32,11 @@ const styles = StyleSheet.create({
     marginVertical: 4,
     height: 300,
     borderWidth: 1,
-    borderColor: COLORS.accent,
+    borderColor: COLORS.border,
     borderRadius: 12,
     padding: 12,
-    backgroundColor: COLORS.panel + "50",
-    shadowColor: COLORS.accent,
-    shadowOpacity: 0.35,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 12,
+    backgroundColor: COLORS.panel,
+    ...SHADOWS.floating,
   },
   group: {
     marginBottom: 14,
