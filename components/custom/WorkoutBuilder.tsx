@@ -1,8 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import { WorkoutModality } from "assets/GenerateWorkout";
 import { Exercise } from "assets/Types";
+import Dropdown, {
+  DropdownOption,
+} from "components/common/Dropdown";
 import { pressableStyles } from "components/common/PressableStyles";
-import ModalityFilter from "components/home/ModalityFilter";
 import { COLORS } from "constants/Colors";
 import { useMemo, useRef, useState } from "react";
 import {
@@ -28,6 +30,11 @@ type DraftItem = {
 
 const MUSCLE_ORDER = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core"];
 const ALL = "All";
+const MODALITY_OPTIONS: DropdownOption<WorkoutModality>[] = [
+  { value: "both", label: "Both" },
+  { value: "weight lifting", label: "Weight Lifting" },
+  { value: "calisthenics", label: "Calisthenics" },
+];
 
 export default function WorkoutBuilder({
   exercises,
@@ -154,34 +161,22 @@ export default function WorkoutBuilder({
         </ScrollView>
       </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.muscleRow}
-      >
-        {[ALL, ...muscles].map((item) => {
-          const active = muscle === item;
-          return (
-            <Pressable
-              key={item}
-              onPress={() => setMuscle(item)}
-              style={({ pressed }) => [
-                styles.muscleChip,
-                active && styles.muscleChipActive,
-                pressed && pressableStyles.pressed,
-              ]}
-            >
-              <Text
-                style={[styles.muscleText, active && styles.muscleTextActive]}
-              >
-                {item}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </ScrollView>
+      <Dropdown
+        label="Muscle group"
+        value={muscle}
+        options={[ALL, ...muscles].map((item) => ({
+          value: item,
+          label: item,
+        }))}
+        onSelect={setMuscle}
+      />
 
-      <ModalityFilter value={modality} onChange={setModality} />
+      <Dropdown
+        label="Modality"
+        value={modality}
+        options={MODALITY_OPTIONS}
+        onSelect={setModality}
+      />
 
       <View style={styles.groupsCard}>
         <ScrollView>
@@ -298,32 +293,6 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     borderRadius: 999,
     padding: 6,
-  },
-  muscleRow: {
-    flexDirection: "row",
-    gap: 8,
-  },
-  muscleChip: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: COLORS.accent,
-    backgroundColor: COLORS.panel + "50",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  muscleChipActive: {
-    backgroundColor: COLORS.accent,
-  },
-  muscleText: {
-    color: COLORS.text,
-    fontSize: 13,
-  },
-  muscleTextActive: {
-    color: COLORS.text,
-    fontWeight: "700",
   },
   groupsCard: {
     marginVertical: 4,

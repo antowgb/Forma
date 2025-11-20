@@ -1,6 +1,6 @@
+import Dropdown, { DropdownOption } from "components/common/Dropdown";
 import ScreenHeader from "components/common/ScreenHeader";
 import RecoveryStatesCard from "components/recovery/RecoveryStatesCard";
-import SortOptions from "components/recovery/SortOptions";
 import { LinearGradient } from "expo-linear-gradient";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -24,9 +24,9 @@ type RecoveryInfo = {
 
 type SortMode = "alpha" | "readySoon";
 
-const SORT_OPTIONS: { key: SortMode; label: string }[] = [
-  { key: "alpha", label: "A → Z" },
-  { key: "readySoon", label: "Ready Soon" },
+const SORT_OPTIONS: DropdownOption<SortMode>[] = [
+  { value: "alpha", label: "A - Z" },
+  { value: "readySoon", label: "Ready Soon" },
 ];
 
 function computeRecovery(muscle: string): RecoveryInfo {
@@ -102,10 +102,11 @@ export default function RecoveryScreen() {
       <View style={styles.container}>
         <ScreenHeader title="Recovery" onReload={onReset} />
 
-        <SortOptions
+        <Dropdown
+          label="Sort by"
+          value={sortMode}
           options={SORT_OPTIONS}
-          active={sortMode}
-          onChange={setSortMode}
+          onSelect={setSortMode}
         />
 
         <RecoveryStatesCard data={sortedData} />

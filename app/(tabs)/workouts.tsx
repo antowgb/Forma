@@ -1,8 +1,8 @@
 import { EXERCISES } from "assets/Exercises";
 import { loadFavorites, toggleFavorite } from "assets/Favorites";
 import { Exercise } from "assets/Types";
+import Dropdown, { DropdownOption } from "components/common/Dropdown";
 import ScreenHeader from "components/common/ScreenHeader";
-import Filters from "components/workouts/Filters";
 import WorkoutGroups from "components/workouts/WorkoutGroups";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useMemo, useState } from "react";
@@ -11,6 +11,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const MUSCLES = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core"] as const;
 type FilterMode = "all" | "weight lifting" | "calisthenics";
+const FILTER_OPTIONS: DropdownOption<FilterMode>[] = [
+  { value: "all", label: "All" },
+  { value: "weight lifting", label: "Weight Lifting" },
+  { value: "calisthenics", label: "Calisthenics" },
+];
 
 export default function WorkoutsScreen() {
   const [filter, setFilter] = useState<FilterMode>("all");
@@ -59,7 +64,12 @@ export default function WorkoutsScreen() {
         <ScreenHeader title="Workouts" />
 
         {/* Filtres */}
-        <Filters active={filter} onChange={setFilter} />
+        <Dropdown
+          label="Modality"
+          value={filter}
+          options={FILTER_OPTIONS}
+          onSelect={setFilter}
+        />
 
         {/* Liste des exercices */}
         <WorkoutGroups

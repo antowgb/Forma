@@ -1,9 +1,8 @@
 import { getDailyWorkout, WorkoutModality } from "assets/GenerateWorkout";
 import { loadRecovery, markMuscleWorked } from "assets/Recovery";
 import { Exercise } from "assets/Types";
+import Dropdown from "components/common/Dropdown";
 import ScreenHeader from "components/common/ScreenHeader";
-import DurationSelector from "components/home/DurationSelector";
-import ModalityFilter from "components/home/ModalityFilter";
 import RestTimer from "components/home/RestTimer";
 import WorkoutCompletionButton from "components/home/WorkoutCompletionButton";
 import WorkoutGroupsList from "components/home/WorkoutGroupsList";
@@ -95,6 +94,19 @@ export default function HomeScreen() {
     return acc;
   }, {});
 
+  const durationOptions = [
+    { value: 30, label: "30 min" },
+    { value: 60, label: "60 min" },
+    { value: 90, label: "90 min" },
+    { value: 120, label: "120 min" },
+  ];
+
+  const modalityOptions = [
+    { value: "both" as WorkoutModality, label: "Both" },
+    { value: "weight lifting" as WorkoutModality, label: "Weight Lifting" },
+    { value: "calisthenics" as WorkoutModality, label: "Calisthenics" },
+  ];
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <LinearGradient
@@ -108,14 +120,20 @@ export default function HomeScreen() {
         {notice ? <Text style={styles.notice}>{notice}</Text> : null}
 
         {/* Choix durée */}
-        <DurationSelector
+        <Dropdown
+          label="Duration"
           value={duration}
-          options={[30, 60, 90, 120]}
-          onChange={setDuration}
+          options={durationOptions}
+          onSelect={setDuration}
         />
 
         {/* Filtre modalité */}
-        <ModalityFilter value={modality} onChange={setModality} />
+        <Dropdown
+          label="Modality"
+          value={modality}
+          options={modalityOptions}
+          onSelect={setModality}
+        />
 
         {/* Workout affiché par muscle */}
         <WorkoutGroupsList groups={simpleGroups} />
