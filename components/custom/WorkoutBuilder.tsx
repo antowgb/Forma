@@ -4,6 +4,7 @@ import { Exercise } from "assets/Types";
 import Dropdown, { DropdownOption } from "components/common/Dropdown";
 import { pressableStyles } from "components/common/PressableStyles";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { RADIUS } from "constants/Radius";
 import { SPACING } from "constants/Spacing";
 import { useMemo, useRef, useState } from "react";
 import {
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     backgroundColor: COLORS.panel,
     ...SHADOWS.floating,
-    borderRadius: 10,
+    borderRadius: RADIUS.md,
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.md,
     color: COLORS.text,
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     backgroundColor: COLORS.panel,
     ...SHADOWS.floating,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     padding: SPACING.md,
     gap: SPACING.sm,
   },
@@ -282,14 +283,14 @@ const styles = StyleSheet.create({
   selectionAction: {
     borderWidth: 1,
     borderColor: COLORS.border,
-    borderRadius: 999,
+    borderRadius: RADIUS.pill,
     padding: SPACING.sm,
   },
   groupsCard: {
     marginVertical: SPACING.xs,
     borderWidth: 1,
     borderColor: COLORS.border,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     padding: SPACING.md,
     height: 250,
     backgroundColor: COLORS.panel,
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     backgroundColor: COLORS.accent,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     padding: SPACING.md,
     alignItems: "center",
     justifyContent: "center",

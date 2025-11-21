@@ -1,6 +1,7 @@
 import { generateReps } from "assets/GenerateWorkout";
 import { Exercise } from "assets/Types";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { RADIUS } from "constants/Radius";
 import { SPACING } from "constants/Spacing";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     height: 300,
     borderWidth: 1,
     borderColor: COLORS.border,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     padding: SPACING.md,
     backgroundColor: COLORS.panel,
     ...SHADOWS.floating,

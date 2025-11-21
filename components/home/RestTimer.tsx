@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { pressableStyles } from "components/common/PressableStyles";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { RADIUS } from "constants/Radius";
 import { SPACING } from "constants/Spacing";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
   card: {
     borderWidth: 1,
     borderColor: COLORS.border,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     padding: SPACING.md,
     backgroundColor: COLORS.panel,
     ...SHADOWS.floating,
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
   playToggleButton: {
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 32,
+    borderRadius: RADIUS.pill,
     width: 52,
     height: 52,
   },
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
   },
   presetButton: {
     flex: 1,
-    borderRadius: 999,
+    borderRadius: RADIUS.pill,
     paddingVertical: SPACING.xs,
     borderWidth: 1,
     borderColor: COLORS.border,

@@ -1,6 +1,7 @@
 import { generateReps } from "assets/GenerateWorkout";
 import { Exercise } from "assets/Types";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { RADIUS } from "constants/Radius";
 import { SPACING } from "constants/Spacing";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     marginVertical: SPACING.md,
     maxHeight: "70%",
     flex: 1,
-    borderRadius: 20,
+    borderRadius: RADIUS.xl,
     borderWidth: 1,
     borderColor: COLORS.border,
     backgroundColor: COLORS.panel,
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
   favoriteButton: {
     paddingHorizontal: SPACING.sm,
     paddingVertical: SPACING.xs,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     backgroundColor: COLORS.panel,
     borderWidth: 1,
     borderColor: COLORS.border,

@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { RADIUS } from "constants/Radius";
 import { SPACING } from "constants/Spacing";
 import { useState } from "react";
 import {
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     backgroundColor: COLORS.panel,
     ...SHADOWS.floating,
-    borderRadius: 10,
+    borderRadius: RADIUS.md,
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.md,
     flexDirection: "row",
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: "100%",
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     backgroundColor: COLORS.panel,
     borderWidth: 1,
     borderColor: COLORS.border,
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
   option: {
     paddingVertical: SPACING.md,
     paddingHorizontal: SPACING.md,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",

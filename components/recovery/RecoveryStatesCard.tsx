@@ -1,4 +1,5 @@
 import { COLORS, SHADOWS } from "constants/Colors";
+import { RADIUS } from "constants/Radius";
 import { SPACING } from "constants/Spacing";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     marginVertical: SPACING.md,
     maxHeight: "70%",
     flex: 1,
-    borderRadius: 20,
+    borderRadius: RADIUS.xl,
     borderWidth: 1,
     borderColor: COLORS.border,
     backgroundColor: COLORS.panel,
@@ -88,13 +89,13 @@ const styles = StyleSheet.create({
   },
   barBackground: {
     height: 8,
-    borderRadius: 999,
+    borderRadius: RADIUS.pill,
     backgroundColor: COLORS.subtext + "40", // muted track so progress is visible
     overflow: "hidden",
   },
   barFill: {
     height: "100%",
-    borderRadius: 999,
+    borderRadius: RADIUS.pill,
     backgroundColor: COLORS.accent,
     opacity: 0.9,
   },

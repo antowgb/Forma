@@ -1,4 +1,5 @@
 import { COLORS, SHADOWS } from "constants/Colors";
+import { RADIUS } from "constants/Radius";
 import { SPACING } from "constants/Spacing";
 import { Pressable, StyleSheet, Text } from "react-native";
 
@@ -34,7 +35,7 @@ export default function WorkoutCompletionButton({
 const styles = StyleSheet.create({
   done: {
     backgroundColor: COLORS.accent,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     padding: SPACING.md,
     alignItems: "center",
     justifyContent: "center",

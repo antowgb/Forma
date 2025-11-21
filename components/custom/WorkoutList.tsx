@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Exercise } from "assets/Types";
 import { pressableStyles } from "components/common/PressableStyles";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { RADIUS } from "constants/Radius";
 import { SPACING } from "constants/Spacing";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { CustomWorkout } from "./types";
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   workoutCard: {
     borderWidth: 1,
     borderColor: COLORS.border,
-    borderRadius: 16,
+    borderRadius: RADIUS.lg,
     padding: SPACING.md,
     gap: SPACING.md,
     backgroundColor: COLORS.panel,
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     gap: SPACING.sm,
   },
   badge: {
-    borderRadius: 999,
+    borderRadius: RADIUS.pill,
     borderWidth: 1,
     borderColor: COLORS.border,
     paddingHorizontal: SPACING.sm,
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
   reorderButton: {
     width: 28,
     height: 28,
-    borderRadius: 14,
+    borderRadius: RADIUS.pill,
     borderWidth: 1,
     borderColor: COLORS.border,
     alignItems: "center",
@@ -218,7 +219,7 @@ const styles = StyleSheet.create({
   stateCard: {
     borderWidth: 1,
     borderColor: COLORS.border,
-    borderRadius: 16,
+    borderRadius: RADIUS.lg,
     padding: SPACING.xxl,
     alignItems: "center",
     gap: SPACING.sm,

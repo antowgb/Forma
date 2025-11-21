@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { RADIUS } from "constants/Radius";
 import { SPACING } from "constants/Spacing";
 import { Tabs } from "expo-router";
 import React from "react";
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
   tabBar: {
     position: "absolute",
     backgroundColor: COLORS.background,
-    borderRadius: 28,
+    borderRadius: RADIUS.xl,
     marginHorizontal: SPACING.xl,
     marginBottom: SPACING.xxl,
     borderWidth: 1,

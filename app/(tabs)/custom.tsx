@@ -9,6 +9,7 @@ import ScreenHeader from "components/common/ScreenHeader";
 import WorkoutList from "components/custom/WorkoutList";
 import { CustomWorkout } from "components/custom/types";
 import { COLORS, SHADOWS } from "constants/Colors";
+import { RADIUS } from "constants/Radius";
 import { SPACING } from "constants/Spacing";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
@@ -285,8 +286,8 @@ const styles = StyleSheet.create({
   listContainer: {
     borderColor: COLORS.border,
     borderWidth: 1,
-    borderRadius: 20,
-    backgroundColor: COLORS.panel + "90",
+    borderRadius: RADIUS.xl,
+    backgroundColor: COLORS.panel,
     height: "80%",
     flexGrow: 0,
     flexShrink: 0,
@@ -303,7 +304,7 @@ const styles = StyleSheet.create({
     gap: SPACING.sm,
   },
   badge: {
-    borderRadius: 999,
+    borderRadius: RADIUS.pill,
     borderWidth: 1,
     borderColor: COLORS.border,
     paddingHorizontal: SPACING.sm,
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
     padding: SPACING.xl,
   },
   overlayCard: {
-    borderRadius: 18,
+    borderRadius: RADIUS.lg,
     backgroundColor: COLORS.panel,
     padding: SPACING.lg,
     gap: SPACING.lg,
@@ -343,7 +344,7 @@ const styles = StyleSheet.create({
   closeButton: {
     width: 32,
     height: 32,
-    borderRadius: 16,
+    borderRadius: RADIUS.pill,
     borderWidth: 1,
     borderColor: COLORS.border,
     alignItems: "center",
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
   exerciseIndex: {
     width: 28,
     height: 28,
-    borderRadius: 14,
+    borderRadius: RADIUS.pill,
     borderWidth: 1,
     borderColor: COLORS.border,
     alignItems: "center",
@@ -400,7 +401,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: SPACING.sm,
-    borderRadius: 12,
+    borderRadius: RADIUS.md,
     paddingVertical: SPACING.md,
     borderWidth: 1,
     borderColor: COLORS.border,
