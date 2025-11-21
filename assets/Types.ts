@@ -24,8 +24,8 @@ export type Exercise = {
   name: string;
   muscle: Muscle;
   modality: Modality | "both";
-  estMinutes: number; // durée moyenne, repos inclus
-  intensity: 1 | 2 | 3; // impact récup (léger/normal/lourd)
+  estMinutes: number; // average duration, rest included
+  intensity: 1 | 2 | 3; // recovery impact (light/normal/heavy)
   equipment: Equipment;
   icon?: string; // optionnel
 };

@@ -2,6 +2,7 @@ import { getDailyWorkout, WorkoutModality } from "assets/GenerateWorkout";
 import { loadRecovery, markMuscleWorked } from "assets/Recovery";
 import { Exercise } from "assets/Types";
 import Dropdown from "components/common/Dropdown";
+import PageTransition from "components/common/PageTransition";
 import ScreenHeader from "components/common/ScreenHeader";
 import RestTimer from "components/home/RestTimer";
 import WorkoutCompletionButton from "components/home/WorkoutCompletionButton";
@@ -41,17 +42,17 @@ export default function HomeScreen() {
     resetCompletionState();
   }
 
-  // ?? charger la recovery une fois au lancement, puis générer le workout du jour
+  // Load recovery once on mount, then generate the daily workout
   useEffect(() => {
     loadRecovery().finally(() => setRecoveryLoaded(true));
   }, []);
 
-  // ?? si tu veux un workout différent par durée le même jour, tu peux garder ça :
+  // Regenerate when duration/modality changes
   useEffect(() => {
     onGenerate();
   }, [duration, modality, recoveryLoaded]);
 
-  // ?? marquer comme complété (et sauvegarder la recovery)
+  // Mark workout complete and persist recovery
   async function complete() {
     const muscleCounts = workout.reduce(
       (acc: Record<string, number>, ex: Exercise) => {
@@ -109,45 +110,50 @@ export default function HomeScreen() {
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <LinearGradient
-        colors={["#060708", "#0B0F12", "#120606"]}
-        style={StyleSheet.absoluteFillObject}
-      />
-
-      <View style={styles.container}>
-        <ScreenHeader title="Forma" onReload={() => onGenerate(true)} />
-
-        {/* Choix durée */}
-        <Dropdown
-          label="Duration"
-          value={duration}
-          options={durationOptions}
-          onSelect={setDuration}
+    <PageTransition animateOnFirstFocus>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: COLORS.background }}
+        edges={["top", "left", "right", "bottom"]}
+      >
+        <LinearGradient
+          colors={["#060708", "#0B0F12", "#120606"]}
+          style={StyleSheet.absoluteFillObject}
         />
 
-        {/* Filtre modalité */}
-        <Dropdown
-          label="Modality"
-          value={modality}
-          options={modalityOptions}
-          onSelect={setModality}
-        />
+        <View style={styles.container}>
+          <ScreenHeader title="Forma" onReload={() => onGenerate(true)} />
 
-        <WorkoutCompletionButton
-          visible={workout.length > 0}
-          completed={completed}
-          onComplete={complete}
-        />
+          {/* Duration selection */}
+          <Dropdown
+            label="Duration"
+            value={duration}
+            options={durationOptions}
+            onSelect={setDuration}
+          />
 
-        {notice ? <Text style={styles.notice}>{notice}</Text> : null}
+          {/* Modality filter */}
+          <Dropdown
+            label="Modality"
+            value={modality}
+            options={modalityOptions}
+            onSelect={setModality}
+          />
 
-        {/* Workout affiché par muscle */}
-        <WorkoutGroupsList groups={simpleGroups} />
+          <WorkoutCompletionButton
+            visible={workout.length > 0}
+            completed={completed}
+            onComplete={complete}
+          />
 
-        <RestTimer />
-      </View>
-    </SafeAreaView>
+          {notice ? <Text style={styles.notice}>{notice}</Text> : null}
+
+          {/* Workout grouped by muscle */}
+          <WorkoutGroupsList groups={simpleGroups} />
+
+          <RestTimer />
+        </View>
+      </SafeAreaView>
+    </PageTransition>
   );
 }
 

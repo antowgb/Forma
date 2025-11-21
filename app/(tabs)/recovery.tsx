@@ -1,11 +1,13 @@
 import { useFocusEffect } from "@react-navigation/native";
 import Dropdown, { DropdownOption } from "components/common/Dropdown";
+import PageTransition from "components/common/PageTransition";
 import ScreenHeader from "components/common/ScreenHeader";
 import RecoveryStatesCard from "components/recovery/RecoveryStatesCard";
 import { LinearGradient } from "expo-linear-gradient";
 import { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { COLORS } from "constants/Colors";
 import { SPACING } from "constants/Spacing";
 
 import {
@@ -161,31 +163,36 @@ export default function RecoveryScreen() {
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <LinearGradient
-        colors={["#060708", "#0B0F12", "#120606"]}
-        style={StyleSheet.absoluteFillObject}
-      />
-
-      <View style={styles.container}>
-        <ScreenHeader title="Recovery" onReload={onReset} />
-
-        <Dropdown
-          label="Sort by"
-          value={sortMode}
-          options={SORT_OPTIONS}
-          onSelect={setSortMode}
-        />
-        <Dropdown
-          label="Muscle group"
-          value={clusterFilter}
-          options={clusterOptions}
-          onSelect={setClusterFilter}
+    <PageTransition animateOnFirstFocus>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: COLORS.background }}
+        edges={["top", "left", "right", "bottom"]}
+      >
+        <LinearGradient
+          colors={["#060708", "#0B0F12", "#120606"]}
+          style={StyleSheet.absoluteFillObject}
         />
 
-        <RecoveryStatesCard data={sortedData} />
-      </View>
-    </SafeAreaView>
+        <View style={styles.container}>
+          <ScreenHeader title="Recovery" onReload={onReset} />
+
+          <Dropdown
+            label="Sort by"
+            value={sortMode}
+            options={SORT_OPTIONS}
+            onSelect={setSortMode}
+          />
+          <Dropdown
+            label="Muscle group"
+            value={clusterFilter}
+            options={clusterOptions}
+            onSelect={setClusterFilter}
+          />
+
+          <RecoveryStatesCard data={sortedData} />
+        </View>
+      </SafeAreaView>
+    </PageTransition>
   );
 }
 

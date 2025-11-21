@@ -2,12 +2,14 @@ import { EXERCISES } from "assets/Exercises";
 import { loadFavorites, toggleFavorite } from "assets/Favorites";
 import { Exercise } from "assets/Types";
 import Dropdown, { DropdownOption } from "components/common/Dropdown";
+import PageTransition from "components/common/PageTransition";
 import ScreenHeader from "components/common/ScreenHeader";
 import WorkoutGroups from "components/workouts/WorkoutGroups";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { COLORS } from "constants/Colors";
 import { SPACING } from "constants/Spacing";
 
 const MUSCLES = [
@@ -78,7 +80,7 @@ export default function WorkoutsScreen() {
     });
   }, [filter]);
 
-  // Groupé par muscle
+  // Grouped by muscle
   const groups = useMemo(() => {
     const acc: Record<string, Exercise[]> = {};
     filtered.forEach((ex) => {
@@ -99,38 +101,43 @@ export default function WorkoutsScreen() {
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <LinearGradient
-        colors={["#060708", "#0B0F12", "#120606"]}
-        style={StyleSheet.absoluteFillObject}
-      />
-
-      <View style={styles.container}>
-        <ScreenHeader title="Workouts" />
-
-        {/* Filtres */}
-        <Dropdown
-          label="Modality"
-          value={filter}
-          options={FILTER_OPTIONS}
-          onSelect={setFilter}
-        />
-        <Dropdown
-          label="Muscle group"
-          value={clusterFilter}
-          options={clusterOptions}
-          onSelect={setClusterFilter}
+    <PageTransition animateOnFirstFocus>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: COLORS.background }}
+        edges={["top", "left", "right", "bottom"]}
+      >
+        <LinearGradient
+          colors={["#060708", "#0B0F12", "#120606"]}
+          style={StyleSheet.absoluteFillObject}
         />
 
-        {/* Liste des exercices */}
-        <WorkoutGroups
-          muscles={filteredMuscles}
-          groups={groups}
-          favorites={favorites}
-          onToggle={onToggle}
-        />
-      </View>
-    </SafeAreaView>
+        <View style={styles.container}>
+          <ScreenHeader title="Workouts" />
+
+          {/* Filtres */}
+          <Dropdown
+            label="Modality"
+            value={filter}
+            options={FILTER_OPTIONS}
+            onSelect={setFilter}
+          />
+          <Dropdown
+            label="Muscle group"
+            value={clusterFilter}
+            options={clusterOptions}
+            onSelect={setClusterFilter}
+          />
+
+          {/* Liste des exercices */}
+          <WorkoutGroups
+            muscles={filteredMuscles}
+            groups={groups}
+            favorites={favorites}
+            onToggle={onToggle}
+          />
+        </View>
+      </SafeAreaView>
+    </PageTransition>
   );
 }
 

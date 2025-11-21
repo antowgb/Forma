@@ -12,6 +12,7 @@ export default function TabLayout() {
       <Tabs
         screenOptions={{
           headerShown: false,
+          sceneStyle: { backgroundColor: COLORS.background },
           tabBarShowLabel: true,
           tabBarHideOnKeyboard: true,
           tabBarStyle: styles.tabBar,

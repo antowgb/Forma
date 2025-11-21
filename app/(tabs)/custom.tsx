@@ -5,6 +5,7 @@ import { EXERCISES } from "assets/Exercises";
 import { loadRecovery, markMuscleWorked } from "assets/Recovery";
 import { Exercise } from "assets/Types";
 import { pressableStyles } from "components/common/PressableStyles";
+import PageTransition from "components/common/PageTransition";
 import ScreenHeader from "components/common/ScreenHeader";
 import WorkoutList from "components/custom/WorkoutList";
 import { CustomWorkout } from "components/custom/types";
@@ -119,160 +120,165 @@ export default function CustomScreen() {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <LinearGradient
-        colors={["#060708", "#0B0F12", "#120606"]}
-        style={StyleSheet.absoluteFillObject}
-      />
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.select({ ios: "padding", android: undefined })}
+    <PageTransition animateOnFirstFocus>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: COLORS.background }}
+        edges={["top", "left", "right", "bottom"]}
       >
-        <View style={styles.screen}>
-          <ScreenHeader
-            title="Custom"
-            actionIcon="add"
-            onActionPress={() => router.push("/create")}
-          />
-
-          <View style={styles.listContainer}>
-            <WorkoutList
-              workouts={workouts}
-              loading={loading}
-              exerciseMap={lookup}
-              onSelect={handleSelectWorkout}
-              onReorder={handleReorder}
+        <LinearGradient
+          colors={["#060708", "#0B0F12", "#120606"]}
+          style={StyleSheet.absoluteFillObject}
+        />
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.select({ ios: "padding", android: undefined })}
+        >
+          <View style={styles.screen}>
+            <ScreenHeader
+              title="Custom"
+              actionIcon="add"
+              onActionPress={() => router.push("/create")}
             />
+
+            <View style={styles.listContainer}>
+              <WorkoutList
+                workouts={workouts}
+                loading={loading}
+                exerciseMap={lookup}
+                onSelect={handleSelectWorkout}
+                onReorder={handleReorder}
+              />
+            </View>
           </View>
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
 
-      <Modal
-        visible={Boolean(selectedWorkout)}
-        transparent
-        animationType="fade"
-        onRequestClose={handleCloseOverlay}
-      >
-        <View style={styles.overlay}>
-          <View style={styles.overlayCard}>
-            {selectedWorkout ? (
-              <>
-                <View style={styles.overlayHeader}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.overlayTitle}>
-                      {selectedWorkout.title}
-                    </Text>
+        <Modal
+          visible={Boolean(selectedWorkout)}
+          transparent
+          animationType="fade"
+          onRequestClose={handleCloseOverlay}
+        >
+          <View style={styles.overlay}>
+            <View style={styles.overlayCard}>
+              {selectedWorkout ? (
+                <>
+                  <View style={styles.overlayHeader}>
+                    <View style={{ flex: 1 }}>
+                      <Text style={styles.overlayTitle}>
+                        {selectedWorkout.title}
+                      </Text>
+                    </View>
+                    <Pressable
+                      accessibilityLabel="Close workout details"
+                      style={({ pressed }) => [
+                        styles.closeButton,
+                        pressed && pressableStyles.pressed,
+                      ]}
+                      onPress={handleCloseOverlay}
+                    >
+                      <Ionicons name="close" size={18} color={COLORS.text} />
+                    </Pressable>
                   </View>
-                  <Pressable
-                    accessibilityLabel="Close workout details"
-                    style={({ pressed }) => [
-                      styles.closeButton,
-                      pressed && pressableStyles.pressed,
-                    ]}
-                    onPress={handleCloseOverlay}
+
+                  {(selectedWorkout.focus ||
+                    selectedWorkout.intensity ||
+                    selectedWorkout.estDuration) && (
+                    <View style={styles.badgeRow}>
+                      {selectedWorkout.focus && (
+                        <View style={styles.badge}>
+                          <Text style={styles.badgeText}>
+                            {selectedWorkout.focus}
+                          </Text>
+                        </View>
+                      )}
+                      {selectedWorkout.intensity && (
+                        <View style={styles.badge}>
+                          <Text style={styles.badgeText}>
+                            {selectedWorkout.intensity}
+                          </Text>
+                        </View>
+                      )}
+                      {selectedWorkout.estDuration && (
+                        <View style={styles.badge}>
+                          <Text style={styles.badgeText}>
+                            {selectedWorkout.estDuration} min
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  )}
+
+                  {selectedWorkout.notes ? (
+                    <Text style={styles.noteText}>{selectedWorkout.notes}</Text>
+                  ) : null}
+
+                  <ScrollView
+                    style={styles.exerciseScroll}
+                    contentContainerStyle={styles.exerciseList}
+                    showsVerticalScrollIndicator={false}
+                    nestedScrollEnabled
                   >
-                    <Ionicons name="close" size={18} color={COLORS.text} />
-                  </Pressable>
-                </View>
-
-                {(selectedWorkout.focus ||
-                  selectedWorkout.intensity ||
-                  selectedWorkout.estDuration) && (
-                  <View style={styles.badgeRow}>
-                    {selectedWorkout.focus && (
-                      <View style={styles.badge}>
-                        <Text style={styles.badgeText}>
-                          {selectedWorkout.focus}
-                        </Text>
-                      </View>
-                    )}
-                    {selectedWorkout.intensity && (
-                      <View style={styles.badge}>
-                        <Text style={styles.badgeText}>
-                          {selectedWorkout.intensity}
-                        </Text>
-                      </View>
-                    )}
-                    {selectedWorkout.estDuration && (
-                      <View style={styles.badge}>
-                        <Text style={styles.badgeText}>
-                          {selectedWorkout.estDuration} min
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-                )}
-
-                {selectedWorkout.notes ? (
-                  <Text style={styles.noteText}>{selectedWorkout.notes}</Text>
-                ) : null}
-
-                <ScrollView
-                  style={styles.exerciseScroll}
-                  contentContainerStyle={styles.exerciseList}
-                  showsVerticalScrollIndicator={false}
-                  nestedScrollEnabled
-                >
-                  {selectedWorkout.exercises.map((entry, index) => {
-                    const reference = lookup[entry.exerciseId];
-                    return (
-                      <View key={entry.id} style={styles.exerciseRow}>
-                        <View style={styles.exerciseIndex}>
-                          <Text style={styles.exerciseIndexText}>
-                            {index + 1}
-                          </Text>
+                    {selectedWorkout.exercises.map((entry, index) => {
+                      const reference = lookup[entry.exerciseId];
+                      return (
+                        <View key={entry.id} style={styles.exerciseRow}>
+                          <View style={styles.exerciseIndex}>
+                            <Text style={styles.exerciseIndexText}>
+                              {index + 1}
+                            </Text>
+                          </View>
+                          <View style={{ flex: 1 }}>
+                            <Text style={styles.exerciseName}>
+                              {reference?.name ?? "Exercise"}
+                            </Text>
+                            <Text style={styles.exerciseMeta}>
+                              {reference?.muscle ?? "N/A"}
+                              {reference?.modality
+                                ? ` - ${reference.modality}`
+                                : ""}
+                            </Text>
+                          </View>
                         </View>
-                        <View style={{ flex: 1 }}>
-                          <Text style={styles.exerciseName}>
-                            {reference?.name ?? "Exercise"}
-                          </Text>
-                          <Text style={styles.exerciseMeta}>
-                            {reference?.muscle ?? "N/A"}
-                            {reference?.modality
-                              ? ` - ${reference.modality}`
-                              : ""}
-                          </Text>
-                        </View>
-                      </View>
-                    );
-                  })}
-                </ScrollView>
+                      );
+                    })}
+                  </ScrollView>
 
-                <View style={styles.overlayActions}>
-                  <Pressable
-                    style={({ pressed }) => [
-                      styles.actionButton,
-                      styles.actionDanger,
-                      pressed && pressableStyles.pressed,
-                    ]}
-                    onPress={() => {
-                      if (selectedWorkout) {
-                        handleDelete(selectedWorkout.id);
-                        handleCloseOverlay();
+                  <View style={styles.overlayActions}>
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.actionButton,
+                        styles.actionDanger,
+                        pressed && pressableStyles.pressed,
+                      ]}
+                      onPress={() => {
+                        if (selectedWorkout) {
+                          handleDelete(selectedWorkout.id);
+                          handleCloseOverlay();
+                        }
+                      }}
+                    >
+                      <Text style={styles.actionText}>Delete</Text>
+                    </Pressable>
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.actionButton,
+                        styles.actionPrimary,
+                        pressed && pressableStyles.pressed,
+                      ]}
+                      onPress={() =>
+                        selectedWorkout && handleMarkComplete(selectedWorkout)
                       }
-                    }}
-                  >
-                    <Text style={styles.actionText}>Delete</Text>
-                  </Pressable>
-                  <Pressable
-                    style={({ pressed }) => [
-                      styles.actionButton,
-                      styles.actionPrimary,
-                      pressed && pressableStyles.pressed,
-                    ]}
-                    onPress={() =>
-                      selectedWorkout && handleMarkComplete(selectedWorkout)
-                    }
-                  >
-                    <Text style={styles.actionText}>Mark complete</Text>
-                  </Pressable>
-                </View>
-              </>
-            ) : null}
+                    >
+                      <Text style={styles.actionText}>Mark complete</Text>
+                    </Pressable>
+                  </View>
+                </>
+              ) : null}
+            </View>
           </View>
-        </View>
-      </Modal>
-    </SafeAreaView>
+        </Modal>
+      </SafeAreaView>
+    </PageTransition>
   );
 }
 
