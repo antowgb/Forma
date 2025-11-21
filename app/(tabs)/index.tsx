@@ -134,18 +134,18 @@ export default function HomeScreen() {
           onSelect={setModality}
         />
 
+        <WorkoutCompletionButton
+          visible={workout.length > 0}
+          completed={completed}
+          onComplete={complete}
+        />
+
         {notice ? <Text style={styles.notice}>{notice}</Text> : null}
 
         {/* Workout affiché par muscle */}
         <WorkoutGroupsList groups={simpleGroups} />
 
         <RestTimer />
-
-        <WorkoutCompletionButton
-          visible={workout.length > 0}
-          completed={completed}
-          onComplete={complete}
-        />
       </View>
     </SafeAreaView>
   );

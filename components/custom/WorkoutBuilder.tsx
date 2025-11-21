@@ -28,7 +28,25 @@ type DraftItem = {
   exerciseId: string;
 };
 
-const MUSCLE_ORDER = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core"];
+const MUSCLE_TO_CLUSTER: Record<string, string> = {
+  Quads: "Legs",
+  Hamstrings: "Legs",
+  Calves: "Legs",
+  "Upper Back": "Back",
+  Lats: "Back",
+  "Lower Back": "Back",
+  "Upper Chest": "Chest",
+  "Lower Chest": "Chest",
+  "Front Deltoid": "Shoulders",
+  "Lateral Deltoid": "Shoulders",
+  "Rear Deltoid": "Shoulders",
+  Biceps: "Arms",
+  Triceps: "Arms",
+  Forearms: "Arms",
+  Core: "Core",
+};
+
+const CLUSTER_ORDER = ["Legs", "Back", "Chest", "Shoulders", "Arms", "Core"];
 const ALL = "All";
 const MODALITY_OPTIONS: DropdownOption<WorkoutModality>[] = [
   { value: "both", label: "Both" },
@@ -41,7 +59,7 @@ export default function WorkoutBuilder({
   onCreate,
 }: WorkoutBuilderProps) {
   const [title, setTitle] = useState("");
-  const [muscle, setMuscle] = useState(ALL);
+  const [clusterFilter, setClusterFilter] = useState(ALL);
   const [modality, setModality] = useState<WorkoutModality>("both");
   const [draft, setDraft] = useState<DraftItem[]>([]);
   const [saving, setSaving] = useState(false);
@@ -61,6 +79,15 @@ export default function WorkoutBuilder({
     return Array.from(set);
   }, [filteredExercises]);
 
+  const availableClusters = useMemo(() => {
+    const set = new Set<string>();
+    muscles.forEach((muscle) => {
+      const cluster = MUSCLE_TO_CLUSTER[muscle];
+      if (cluster) set.add(cluster);
+    });
+    return CLUSTER_ORDER.filter((cluster) => set.has(cluster));
+  }, [muscles]);
+
   const groupedExercises = useMemo(() => {
     const groups: Record<string, Exercise[]> = {};
     filteredExercises.forEach((exercise) => {
@@ -76,14 +103,23 @@ export default function WorkoutBuilder({
   }, [filteredExercises]);
 
   const orderedGroupKeys = useMemo(() => {
-    return Object.keys(groupedExercises)
-      .sort((a, b) => {
-        const indexA = MUSCLE_ORDER.indexOf(a);
-        const indexB = MUSCLE_ORDER.indexOf(b);
-        return (indexA === -1 ? 99 : indexA) - (indexB === -1 ? 99 : indexB);
-      })
-      .filter((key) => muscle === ALL || key === muscle);
-  }, [groupedExercises, muscle]);
+    const available = Object.keys(groupedExercises);
+    const filtered =
+      clusterFilter === ALL
+        ? available
+        : available.filter((m) => MUSCLE_TO_CLUSTER[m] === clusterFilter);
+    return CLUSTER_ORDER.flatMap((cluster) =>
+      filtered
+        .filter((m) => MUSCLE_TO_CLUSTER[m] === cluster)
+        .sort((a, b) => a.localeCompare(b))
+    );
+  }, [groupedExercises, clusterFilter]);
+
+  const clustersWithItems = useMemo(() => {
+    return CLUSTER_ORDER.filter((cluster) =>
+      orderedGroupKeys.some((m) => MUSCLE_TO_CLUSTER[m] === cluster)
+    );
+  }, [orderedGroupKeys]);
 
   function addExercise(exercise: Exercise) {
     const exists = draft.some((entry) => entry.exerciseId === exercise.id);
@@ -163,12 +199,12 @@ export default function WorkoutBuilder({
 
       <Dropdown
         label="Muscle group"
-        value={muscle}
-        options={[ALL, ...muscles].map((item) => ({
+        value={clusterFilter}
+        options={[ALL, ...availableClusters].map((item) => ({
           value: item,
           label: item,
         }))}
-        onSelect={setMuscle}
+        onSelect={setClusterFilter}
       />
 
       <Dropdown
@@ -180,33 +216,51 @@ export default function WorkoutBuilder({
 
       <View style={styles.groupsCard}>
         <ScrollView>
-          {orderedGroupKeys.map((muscle) => {
-            const list = groupedExercises[muscle];
-            if (!list || !list.length) return null;
-            return (
-              <View key={muscle} style={styles.group}>
-                <Text style={styles.muscleTitle}>{muscle}</Text>
-                {list.map((exercise) => (
-                  <Pressable
-                    key={exercise.id}
-                    onPress={() => addExercise(exercise)}
-                    style={({ pressed }) => [
-                      styles.exerciseRow,
-                      pressed && pressableStyles.pressed,
-                    ]}
-                  >
-                    <View>
-                      <Text style={styles.exerciseName}>{exercise.name}</Text>
-                      <Text style={styles.exerciseMeta}>
-                        {exercise.modality} • {exercise.estMinutes} min
-                      </Text>
-                    </View>
-                    <Ionicons name="add" size={16} color={COLORS.text} />
-                  </Pressable>
-                ))}
+          {clustersWithItems.map((cluster, index) => (
+            <View key={cluster} style={styles.clusterWrapper}>
+              <View style={styles.group}>
+                <Text style={styles.clusterTitle}>{cluster}</Text>
+                {orderedGroupKeys
+                  .filter((m) => MUSCLE_TO_CLUSTER[m] === cluster)
+                  .map((muscleKey) => {
+                    const list = groupedExercises[muscleKey];
+                    if (!list || !list.length) return null;
+                    return (
+                      <View key={muscleKey} style={styles.subGroup}>
+                        <Text style={styles.muscleTitle}>{muscleKey}</Text>
+                        {list.map((exercise) => (
+                          <Pressable
+                            key={exercise.id}
+                            onPress={() => addExercise(exercise)}
+                            style={({ pressed }) => [
+                              styles.exerciseRow,
+                              pressed && pressableStyles.pressed,
+                            ]}
+                          >
+                            <View>
+                              <Text style={styles.exerciseName}>
+                                {exercise.name}
+                              </Text>
+                              <Text style={styles.exerciseMeta}>
+                                {exercise.modality} · {exercise.estMinutes} min
+                              </Text>
+                            </View>
+                            <Ionicons
+                              name="add"
+                              size={16}
+                              color={COLORS.text}
+                            />
+                          </Pressable>
+                        ))}
+                      </View>
+                    );
+                  })}
               </View>
-            );
-          })}
+              {index < clustersWithItems.length - 1 ? (
+                <View style={styles.clusterDivider} />
+              ) : null}
+            </View>
+          ))}
         </ScrollView>
       </View>
 
@@ -300,9 +354,29 @@ const styles = StyleSheet.create({
   group: {
     marginBottom: SPACING.md,
   },
+  clusterWrapper: {
+    marginBottom: SPACING.sm,
+  },
+  clusterDivider: {
+    height: 2,
+    backgroundColor: COLORS.text + "20",
+    marginVertical: SPACING.sm,
+  },
+  clusterTitle: {
+    color: COLORS.text,
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: SPACING.xs,
+  },
+  subGroup: {
+    marginBottom: SPACING.md,
+    paddingBottom: SPACING.sm,
+    borderBottomWidth: 2,
+    borderBottomColor: COLORS.text + "20",
+  },
   muscleTitle: {
     color: COLORS.text,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "700",
     marginBottom: SPACING.xs,
   },
@@ -319,7 +393,7 @@ const styles = StyleSheet.create({
   },
   exerciseMeta: {
     color: COLORS.subtext,
-    fontSize: 11,
+    fontSize: 12,
   },
   saveButton: {
     backgroundColor: COLORS.accent,

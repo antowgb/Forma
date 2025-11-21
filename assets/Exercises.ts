@@ -5,7 +5,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "pushups",
     name: "Push-ups",
-    muscle: "Chest",
+    muscle: "Upper Chest",
     modality: "calisthenics",
     estMinutes: 8,
     intensity: 2,
@@ -14,7 +14,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "incline_pushups",
     name: "Incline Push-ups",
-    muscle: "Chest",
+    muscle: "Upper Chest",
     modality: "calisthenics",
     estMinutes: 7,
     intensity: 1,
@@ -23,7 +23,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "bench_press",
     name: "Bench Press",
-    muscle: "Chest",
+    muscle: "Lower Chest",
     modality: "weight lifting",
     estMinutes: 12,
     intensity: 3,
@@ -32,7 +32,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "db_press",
     name: "Dumbbell Press",
-    muscle: "Chest",
+    muscle: "Lower Chest",
     modality: "weight lifting",
     estMinutes: 10,
     intensity: 2,
@@ -41,7 +41,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "chest_dips",
     name: "Chest Dips",
-    muscle: "Chest",
+    muscle: "Lower Chest",
     modality: "calisthenics",
     estMinutes: 9,
     intensity: 3,
@@ -50,7 +50,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "incline_db_press",
     name: "Incline Dumbbell Press",
-    muscle: "Chest",
+    muscle: "Upper Chest",
     modality: "weight lifting",
     estMinutes: 11,
     intensity: 3,
@@ -59,7 +59,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "cable_fly",
     name: "Cable Fly",
-    muscle: "Chest",
+    muscle: "Upper Chest",
     modality: "weight lifting",
     estMinutes: 9,
     intensity: 2,
@@ -70,7 +70,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "pullups",
     name: "Pull-ups",
-    muscle: "Back",
+    muscle: "Lats",
     modality: "calisthenics",
     estMinutes: 10,
     intensity: 3,
@@ -79,7 +79,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "inverted_row",
     name: "Inverted Rows",
-    muscle: "Back",
+    muscle: "Upper Back",
     modality: "calisthenics",
     estMinutes: 9,
     intensity: 2,
@@ -88,7 +88,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "lat_pulldown",
     name: "Lat Pulldown",
-    muscle: "Back",
+    muscle: "Lats",
     modality: "weight lifting",
     estMinutes: 10,
     intensity: 2,
@@ -97,7 +97,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "barbell_row",
     name: "Barbell Row",
-    muscle: "Back",
+    muscle: "Upper Back",
     modality: "weight lifting",
     estMinutes: 12,
     intensity: 3,
@@ -106,7 +106,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "seated_row",
     name: "Seated Cable Row",
-    muscle: "Back",
+    muscle: "Upper Back",
     modality: "weight lifting",
     estMinutes: 10,
     intensity: 2,
@@ -115,7 +115,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "deadlift",
     name: "Conventional Deadlift",
-    muscle: "Back",
+    muscle: "Lower Back",
     modality: "weight lifting",
     estMinutes: 14,
     intensity: 3,
@@ -126,7 +126,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "body_squats",
     name: "Bodyweight Squats",
-    muscle: "Legs",
+    muscle: "Quads",
     modality: "calisthenics",
     estMinutes: 8,
     intensity: 2,
@@ -135,7 +135,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "lunges",
     name: "Lunges",
-    muscle: "Legs",
+    muscle: "Quads",
     modality: "calisthenics",
     estMinutes: 9,
     intensity: 2,
@@ -144,7 +144,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "back_squat",
     name: "Back Squat",
-    muscle: "Legs",
+    muscle: "Quads",
     modality: "weight lifting",
     estMinutes: 14,
     intensity: 3,
@@ -153,7 +153,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "romanian_dl",
     name: "Romanian Deadlift",
-    muscle: "Legs",
+    muscle: "Hamstrings",
     modality: "weight lifting",
     estMinutes: 12,
     intensity: 3,
@@ -162,7 +162,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "leg_press",
     name: "Leg Press",
-    muscle: "Legs",
+    muscle: "Quads",
     modality: "weight lifting",
     estMinutes: 10,
     intensity: 2,
@@ -171,7 +171,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "front_squat",
     name: "Front Squat",
-    muscle: "Legs",
+    muscle: "Quads",
     modality: "weight lifting",
     estMinutes: 13,
     intensity: 3,
@@ -180,7 +180,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "walking_lunges",
     name: "Walking Lunges",
-    muscle: "Legs",
+    muscle: "Quads",
     modality: "both",
     estMinutes: 9,
     intensity: 2,
@@ -189,9 +189,29 @@ export const EXERCISES: Exercise[] = [
   {
     id: "hip_thrust",
     name: "Hip Thrust",
-    muscle: "Legs",
+    muscle: "Hamstrings",
     modality: "weight lifting",
     estMinutes: 10,
+    intensity: 2,
+    equipment: "gym",
+  },
+
+  // CALVES
+  {
+    id: "standing_calf_raise",
+    name: "Standing Calf Raise",
+    muscle: "Calves",
+    modality: "calisthenics",
+    estMinutes: 6,
+    intensity: 1,
+    equipment: "none",
+  },
+  {
+    id: "seated_calf_raise",
+    name: "Seated Calf Raise",
+    muscle: "Calves",
+    modality: "weight lifting",
+    estMinutes: 7,
     intensity: 2,
     equipment: "gym",
   },
@@ -200,7 +220,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "pike_pushups",
     name: "Pike Push-ups",
-    muscle: "Shoulders",
+    muscle: "Front Deltoid",
     modality: "calisthenics",
     estMinutes: 8,
     intensity: 2,
@@ -209,7 +229,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "oh_press",
     name: "Overhead Press",
-    muscle: "Shoulders",
+    muscle: "Front Deltoid",
     modality: "weight lifting",
     estMinutes: 12,
     intensity: 3,
@@ -218,7 +238,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "lateral_raise",
     name: "Dumbbell Lateral Raise",
-    muscle: "Shoulders",
+    muscle: "Lateral Deltoid",
     modality: "weight lifting",
     estMinutes: 8,
     intensity: 1,
@@ -227,7 +247,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "rear_delt_fly",
     name: "Rear Delt Fly",
-    muscle: "Shoulders",
+    muscle: "Rear Deltoid",
     modality: "weight lifting",
     estMinutes: 8,
     intensity: 1,
@@ -236,7 +256,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "arnold_press",
     name: "Arnold Press",
-    muscle: "Shoulders",
+    muscle: "Front Deltoid",
     modality: "weight lifting",
     estMinutes: 11,
     intensity: 3,
@@ -245,7 +265,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "upright_row",
     name: "Upright Row",
-    muscle: "Shoulders",
+    muscle: "Lateral Deltoid",
     modality: "weight lifting",
     estMinutes: 9,
     intensity: 2,
@@ -254,36 +274,18 @@ export const EXERCISES: Exercise[] = [
   {
     id: "face_pull",
     name: "Face Pull",
-    muscle: "Shoulders",
+    muscle: "Rear Deltoid",
     modality: "weight lifting",
     estMinutes: 8,
     intensity: 1,
     equipment: "gym",
   },
 
-  // ARMS
-  {
-    id: "diamond_pushups",
-    name: "Diamond Push-ups",
-    muscle: "Arms",
-    modality: "calisthenics",
-    estMinutes: 8,
-    intensity: 2,
-    equipment: "none",
-  },
-  {
-    id: "bench_dips",
-    name: "Bench Dips",
-    muscle: "Arms",
-    modality: "calisthenics",
-    estMinutes: 8,
-    intensity: 2,
-    equipment: "basic",
-  },
+  // BICEPS
   {
     id: "bb_curl",
     name: "Barbell Curl",
-    muscle: "Arms",
+    muscle: "Biceps",
     modality: "weight lifting",
     estMinutes: 8,
     intensity: 2,
@@ -292,16 +294,36 @@ export const EXERCISES: Exercise[] = [
   {
     id: "hammer_curl",
     name: "Hammer Curl",
-    muscle: "Arms",
+    muscle: "Biceps",
     modality: "weight lifting",
     estMinutes: 8,
     intensity: 1,
     equipment: "gym",
   },
+
+  // TRICEPS
+  {
+    id: "diamond_pushups",
+    name: "Diamond Push-ups",
+    muscle: "Triceps",
+    modality: "calisthenics",
+    estMinutes: 8,
+    intensity: 2,
+    equipment: "none",
+  },
+  {
+    id: "bench_dips",
+    name: "Bench Dips",
+    muscle: "Triceps",
+    modality: "calisthenics",
+    estMinutes: 8,
+    intensity: 2,
+    equipment: "basic",
+  },
   {
     id: "tricep_pushdown",
     name: "Triceps Pushdown",
-    muscle: "Arms",
+    muscle: "Triceps",
     modality: "weight lifting",
     estMinutes: 8,
     intensity: 2,
@@ -310,11 +332,31 @@ export const EXERCISES: Exercise[] = [
   {
     id: "skull_crusher",
     name: "Skull Crusher",
-    muscle: "Arms",
+    muscle: "Triceps",
     modality: "weight lifting",
     estMinutes: 9,
     intensity: 2,
     equipment: "gym",
+  },
+
+  // FOREARMS
+  {
+    id: "wrist_curl",
+    name: "Wrist Curl",
+    muscle: "Forearms",
+    modality: "weight lifting",
+    estMinutes: 6,
+    intensity: 1,
+    equipment: "basic",
+  },
+  {
+    id: "farmer_carry",
+    name: "Farmer's Carry",
+    muscle: "Forearms",
+    modality: "weight lifting",
+    estMinutes: 8,
+    intensity: 2,
+    equipment: "basic",
   },
 
   // CORE
@@ -395,7 +437,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "kb_swing",
     name: "Kettlebell Swing",
-    muscle: "Legs",
+    muscle: "Hamstrings",
     modality: "weight lifting",
     estMinutes: 8,
     intensity: 2,

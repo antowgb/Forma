@@ -1,4 +1,19 @@
-export type Muscle = "Chest" | "Back" | "Legs" | "Shoulders" | "Arms" | "Core";
+export type Muscle =
+  | "Upper Chest"
+  | "Lower Chest"
+  | "Upper Back"
+  | "Lats"
+  | "Lower Back"
+  | "Quads"
+  | "Hamstrings"
+  | "Calves"
+  | "Lateral Deltoid"
+  | "Front Deltoid"
+  | "Rear Deltoid"
+  | "Biceps"
+  | "Triceps"
+  | "Forearms"
+  | "Core";
 export type Modality = "weight lifting" | "calisthenics" | "auto";
 export type Equipment = "none" | "basic" | "gym";
 export type WorkoutDuration = 30 | 60 | 90 | 120;

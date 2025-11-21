@@ -7,6 +7,26 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { pressableStyles } from "components/common/PressableStyles";
 
+const MUSCLE_TO_CLUSTER: Record<string, string> = {
+  Quads: "Legs",
+  Hamstrings: "Legs",
+  Calves: "Legs",
+  "Upper Back": "Back",
+  Lats: "Back",
+  "Lower Back": "Back",
+  "Upper Chest": "Chest",
+  "Lower Chest": "Chest",
+  "Front Deltoid": "Shoulders",
+  "Lateral Deltoid": "Shoulders",
+  "Rear Deltoid": "Shoulders",
+  Biceps: "Arms",
+  Triceps: "Arms",
+  Forearms: "Arms",
+  Core: "Core",
+};
+
+const CLUSTER_ORDER = ["Legs", "Back", "Chest", "Shoulders", "Arms", "Core"];
+
 type WorkoutGroupsProps = {
   muscles: readonly string[];
   groups: Record<string, Exercise[]>;
@@ -20,41 +40,67 @@ export default function WorkoutGroups({
   favorites,
   onToggle,
 }: WorkoutGroupsProps) {
+  const clustersWithItems = CLUSTER_ORDER.filter((cluster) =>
+    muscles.some(
+      (muscle) =>
+        MUSCLE_TO_CLUSTER[muscle] === cluster &&
+        (groups[muscle] ?? []).length > 0
+    )
+  );
+
   return (
     <View style={styles.card}>
       <ScrollView>
-        {muscles.map((muscle) => {
-          const list = groups[muscle] || [];
-          if (list.length === 0) return null;
+        {clustersWithItems.map((cluster, index) => {
+          const clusterMuscles = muscles.filter(
+            (muscle) => MUSCLE_TO_CLUSTER[muscle] === cluster
+          );
 
           return (
-            <View key={muscle} style={styles.section}>
-              <Text style={styles.muscleTitle}>{muscle}</Text>
-              {list.map((exercise) => {
-                const isFav = !!favorites[exercise.id];
-                return (
-                  <View key={exercise.id} style={styles.exerciseRow}>
-                    <View style={styles.exerciseInfo}>
-                      <Text style={styles.exerciseName}>{exercise.name}</Text>
-                      <Text style={styles.exerciseSub}>
-                        {generateReps(exercise)} - {exercise.modality}
-                      </Text>
-                    </View>
+            <View key={cluster} style={styles.clusterWrapper}>
+              <View style={styles.clusterSection}>
+                <Text style={styles.clusterTitle}>{cluster}</Text>
+                {clusterMuscles.map((muscle) => {
+                  const list = groups[muscle] || [];
+                  if (list.length === 0) return null;
 
-                    <Pressable
-                      onPress={() => onToggle(exercise.id)}
-                      style={({ pressed }) => [
-                        styles.favoriteButton,
-                        pressed && pressableStyles.pressed,
-                      ]}
-                    >
-                      <Text style={styles.favoriteIcon}>
-                        {isFav ? "★" : "☆"}
-                      </Text>
-                    </Pressable>
-                  </View>
-                );
-              })}
+                  return (
+                    <View key={muscle} style={styles.section}>
+                      <Text style={styles.muscleTitle}>{muscle}</Text>
+                      {list.map((exercise) => {
+                        const isFav = !!favorites[exercise.id];
+                        return (
+                          <View key={exercise.id} style={styles.exerciseRow}>
+                            <View style={styles.exerciseInfo}>
+                              <Text style={styles.exerciseName}>
+                                {exercise.name}
+                              </Text>
+                              <Text style={styles.exerciseSub}>
+                                {generateReps(exercise)} - {exercise.modality}
+                              </Text>
+                            </View>
+
+                            <Pressable
+                              onPress={() => onToggle(exercise.id)}
+                              style={({ pressed }) => [
+                                styles.favoriteButton,
+                                pressed && pressableStyles.pressed,
+                              ]}
+                            >
+                              <Text style={styles.favoriteIcon}>
+                                {isFav ? "★" : "☆"}
+                              </Text>
+                            </Pressable>
+                          </View>
+                        );
+                      })}
+                    </View>
+                  );
+                })}
+              </View>
+              {index < clustersWithItems.length - 1 ? (
+                <View style={styles.clusterDivider} />
+              ) : null}
             </View>
           );
         })}
@@ -66,7 +112,7 @@ export default function WorkoutGroups({
 const styles = StyleSheet.create({
   card: {
     marginVertical: SPACING.md,
-    maxHeight: "70%",
+    maxHeight: "65%",
     flex: 1,
     borderRadius: RADIUS.xl,
     borderWidth: 1,
@@ -75,12 +121,29 @@ const styles = StyleSheet.create({
     padding: SPACING.lg,
     ...SHADOWS.floating,
   },
+  clusterSection: {
+    marginBottom: SPACING.xl,
+  },
+  clusterWrapper: {
+    marginBottom: SPACING.lg,
+  },
+  clusterDivider: {
+    height: 2,
+    backgroundColor: COLORS.text + "20",
+    marginVertical: SPACING.sm,
+  },
+  clusterTitle: {
+    color: COLORS.text,
+    fontSize: 22,
+    fontWeight: "700",
+    marginBottom: SPACING.sm,
+  },
   section: {
     marginBottom: SPACING.lg,
   },
   muscleTitle: {
     color: COLORS.text,
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "700",
     marginBottom: SPACING.sm,
   },
@@ -94,12 +157,12 @@ const styles = StyleSheet.create({
   },
   exerciseName: {
     color: COLORS.text,
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "500",
   },
   exerciseSub: {
     color: COLORS.subtext,
-    fontSize: 13,
+    fontSize: 14,
   },
   favoriteButton: {
     paddingHorizontal: SPACING.sm,

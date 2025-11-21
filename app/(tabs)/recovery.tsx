@@ -15,7 +15,26 @@ import {
   resetRecovery,
 } from "assets/Recovery";
 
-const MUSCLES = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core"];
+const MUSCLES = [
+  "Quads",
+  "Hamstrings",
+  "Calves",
+  "Upper Back",
+  "Lats",
+  "Lower Back",
+  "Upper Chest",
+  "Lower Chest",
+  "Front Deltoid",
+  "Lateral Deltoid",
+  "Rear Deltoid",
+  "Biceps",
+  "Triceps",
+  "Forearms",
+  "Core",
+];
+const CLUSTERS = ["Legs", "Back", "Chest", "Shoulders", "Arms", "Core"] as const;
+type ClusterFilter = (typeof CLUSTERS)[number] | "All";
+const ALL = "All";
 
 type RecoveryInfo = {
   ready: boolean;
@@ -25,6 +44,17 @@ type RecoveryInfo = {
 };
 
 type SortMode = "alpha" | "readySoon";
+function muscleCluster(muscle: string) {
+  if (["Quads", "Hamstrings", "Calves"].includes(muscle)) return "Legs";
+  if (["Upper Back", "Lats", "Lower Back"].includes(muscle)) return "Back";
+  if (["Upper Chest", "Lower Chest"].includes(muscle)) return "Chest";
+  if (
+    ["Front Deltoid", "Lateral Deltoid", "Rear Deltoid"].includes(muscle)
+  )
+    return "Shoulders";
+  if (["Biceps", "Triceps", "Forearms"].includes(muscle)) return "Arms";
+  return "Core";
+}
 
 const SORT_OPTIONS: DropdownOption<SortMode>[] = [
   { value: "alpha", label: "A - Z" },
@@ -71,6 +101,7 @@ const buildRecoverySnapshot = () =>
 export default function RecoveryScreen() {
   const [data, setData] = useState(buildRecoverySnapshot);
   const [sortMode, setSortMode] = useState<SortMode>("alpha");
+  const [clusterFilter, setClusterFilter] = useState<ClusterFilter>(ALL);
   const refreshData = useCallback(() => setData(buildRecoverySnapshot()), []);
 
   useFocusEffect(
@@ -102,8 +133,15 @@ export default function RecoveryScreen() {
     refreshData();
   }
 
+  const filteredData = useMemo(() => {
+    if (clusterFilter === ALL) return data;
+    return data.filter(
+      (entry) => muscleCluster(entry.muscle) === clusterFilter
+    );
+  }, [data, clusterFilter]);
+
   const sortedData = useMemo(() => {
-    const base = [...data];
+    const base = [...filteredData];
     if (sortMode === "readySoon") {
       return base.sort((a, b) => {
         if (a.ready !== b.ready) {
@@ -113,7 +151,12 @@ export default function RecoveryScreen() {
       });
     }
     return base.sort((a, b) => a.muscle.localeCompare(b.muscle));
-  }, [data, sortMode]);
+  }, [filteredData, sortMode]);
+
+  const clusterOptions: DropdownOption<ClusterFilter>[] = [
+    { value: ALL, label: "All groups" },
+    ...CLUSTERS.map((c) => ({ value: c, label: c })),
+  ];
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -131,6 +174,12 @@ export default function RecoveryScreen() {
           options={SORT_OPTIONS}
           onSelect={setSortMode}
         />
+        <Dropdown
+          label="Muscle group"
+          value={clusterFilter}
+          options={clusterOptions}
+          onSelect={setClusterFilter}
+        />
 
         <RecoveryStatesCard data={sortedData} />
       </View>
@@ -142,6 +191,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: SPACING.xl,
-    gap: SPACING.lg,
+    gap: SPACING.md,
   },
 });

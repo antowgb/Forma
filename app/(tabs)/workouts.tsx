@@ -10,7 +10,26 @@ import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SPACING } from "constants/Spacing";
 
-const MUSCLES = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core"] as const;
+const MUSCLES = [
+  "Quads",
+  "Hamstrings",
+  "Calves",
+  "Upper Back",
+  "Lats",
+  "Lower Back",
+  "Upper Chest",
+  "Lower Chest",
+  "Front Deltoid",
+  "Lateral Deltoid",
+  "Rear Deltoid",
+  "Biceps",
+  "Triceps",
+  "Forearms",
+  "Core",
+] as const;
+const CLUSTERS = ["Legs", "Back", "Chest", "Shoulders", "Arms", "Core"] as const;
+type ClusterFilter = (typeof CLUSTERS)[number] | "All";
+const ALL = "All";
 type FilterMode = "all" | "weight lifting" | "calisthenics";
 const FILTER_OPTIONS: DropdownOption<FilterMode>[] = [
   { value: "all", label: "All" },
@@ -18,8 +37,21 @@ const FILTER_OPTIONS: DropdownOption<FilterMode>[] = [
   { value: "calisthenics", label: "Calisthenics" },
 ];
 
+function muscleCluster(muscle: string) {
+  if (["Quads", "Hamstrings", "Calves"].includes(muscle)) return "Legs";
+  if (["Upper Back", "Lats", "Lower Back"].includes(muscle)) return "Back";
+  if (["Upper Chest", "Lower Chest"].includes(muscle)) return "Chest";
+  if (
+    ["Front Deltoid", "Lateral Deltoid", "Rear Deltoid"].includes(muscle)
+  )
+    return "Shoulders";
+  if (["Biceps", "Triceps", "Forearms"].includes(muscle)) return "Arms";
+  return "Core";
+}
+
 export default function WorkoutsScreen() {
   const [filter, setFilter] = useState<FilterMode>("all");
+  const [clusterFilter, setClusterFilter] = useState<ClusterFilter>(ALL);
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
 
   // Charger les favoris au montage
@@ -54,6 +86,16 @@ export default function WorkoutsScreen() {
     return acc;
   }, [filtered]);
 
+  const filteredMuscles = useMemo(() => {
+    if (clusterFilter === ALL) return MUSCLES;
+    return MUSCLES.filter((muscle) => muscleCluster(muscle) === clusterFilter);
+  }, [clusterFilter]);
+
+  const clusterOptions: DropdownOption<ClusterFilter>[] = [
+    { value: ALL, label: "All groups" },
+    ...CLUSTERS.map((c) => ({ value: c, label: c })),
+  ];
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <LinearGradient
@@ -71,10 +113,16 @@ export default function WorkoutsScreen() {
           options={FILTER_OPTIONS}
           onSelect={setFilter}
         />
+        <Dropdown
+          label="Muscle group"
+          value={clusterFilter}
+          options={clusterOptions}
+          onSelect={setClusterFilter}
+        />
 
         {/* Liste des exercices */}
         <WorkoutGroups
-          muscles={MUSCLES}
+          muscles={filteredMuscles}
           groups={groups}
           favorites={favorites}
           onToggle={onToggle}
@@ -88,6 +136,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: SPACING.xl,
-    gap: SPACING.lg,
+    gap: SPACING.md,
   },
 });

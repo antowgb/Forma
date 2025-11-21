@@ -1,6 +1,6 @@
 import { EXERCISES } from "assets/Exercises";
 import { getFavorites } from "assets/Favorites";
-import { isMuscleReady } from "assets/Recovery";
+import { getRecoveryRatio, isMuscleReady } from "assets/Recovery";
 import { Exercise } from "./Types";
 
 const favs = getFavorites();
@@ -27,12 +27,32 @@ export function generateReps(ex: Exercise) {
   return "3 x 12";
 }
 
-const MAX_MUSCLES_PER_WORKOUT = 3;
 const FULL_RECOVERY_NOTICE = "Rest recommended : all muscles are recovering";
 const NO_SLOT_NOTICE =
   "Rest recommended : no slots available with current recovery";
 
 type ScoredExercise = { ex: Exercise; score: number };
+
+const MUSCLE_CLUSTERS: Record<string, string> = {
+  "Upper Chest": "Chest",
+  "Lower Chest": "Chest",
+  "Upper Back": "Back",
+  Lats: "Back",
+  "Lower Back": "Back",
+  Quads: "Legs",
+  Hamstrings: "Legs",
+  Calves: "Legs",
+  "Front Deltoid": "Deltoids",
+  "Lateral Deltoid": "Deltoids",
+  "Rear Deltoid": "Deltoids",
+  Biceps: "Arms",
+  Triceps: "Arms",
+  Forearms: "Arms",
+  Core: "Core",
+};
+
+const MAX_CLUSTERS_PER_WORKOUT = 5;
+const MAX_MUSCLES_PER_WORKOUT = 8;
 
 export function generateWorkout(
   durationMinutes: number,
@@ -86,6 +106,7 @@ function scoreExercise(
   let score = 0;
 
   if (readySet.has(ex.muscle)) score += 100;
+  score += getRecoveryRatio(ex.muscle) * 40;
   if (
     modality === "both"
       ? ex.modality === "both"
@@ -95,7 +116,7 @@ function scoreExercise(
   }
   score += Math.max(0, 25 - ex.estMinutes);
   if (favs[ex.id]) score += 30;
-  score += Math.random() * 25;
+  score += Math.random() * 8;
 
   return score;
 }
@@ -122,15 +143,43 @@ function selectMuscles(
   readyMuscles: string[],
   pools: Map<string, ScoredExercise[]>
 ) {
-  return readyMuscles
-    .map((muscle) => ({
-      muscle,
-      bestScore: pools.get(muscle)?.[0]?.score ?? -Infinity,
-    }))
+  const clusters = groupMusclesByCluster(readyMuscles, pools);
+  const muscles = selectClusters(clusters, pools).flatMap(
+    (cluster) => clusters.get(cluster) ?? []
+  );
+  return muscles.slice(0, MAX_MUSCLES_PER_WORKOUT);
+}
+
+function groupMusclesByCluster(
+  readyMuscles: string[],
+  pools: Map<string, ScoredExercise[]>
+) {
+  const clusters = new Map<string, string[]>();
+  readyMuscles.forEach((muscle) => {
+    const cluster = MUSCLE_CLUSTERS[muscle] ?? muscle;
+    if (!clusters.has(cluster)) clusters.set(cluster, []);
+    if ((pools.get(muscle)?.length ?? 0) > 0) {
+      clusters.get(cluster)!.push(muscle);
+    }
+  });
+  return clusters;
+}
+
+function selectClusters(
+  clusters: Map<string, string[]>,
+  pools: Map<string, ScoredExercise[]>
+) {
+  return Array.from(clusters.entries())
+    .map(([cluster, muscles]) => {
+      const bestScore = Math.max(
+        ...muscles.map((muscle) => pools.get(muscle)?.[0]?.score ?? -Infinity)
+      );
+      return { cluster, bestScore };
+    })
     .filter(({ bestScore }) => bestScore > -Infinity)
     .sort((a, b) => b.bestScore - a.bestScore)
-    .slice(0, MAX_MUSCLES_PER_WORKOUT)
-    .map(({ muscle }) => muscle);
+    .slice(0, MAX_CLUSTERS_PER_WORKOUT)
+    .map(({ cluster }) => cluster);
 }
 
 function buildBalancedWorkout(
@@ -214,9 +263,26 @@ function findCandidateIndex(
   limit: number,
   allowOverflow: boolean
 ) {
-  return pool.findIndex(
-    ({ ex }) => allowOverflow || total + ex.estMinutes <= limit
-  );
+  let bestIndex = -1;
+  let bestScore = Number.NEGATIVE_INFINITY;
+  const remaining = limit - total;
+
+  pool.forEach(({ ex, score }, index) => {
+    if (!allowOverflow && total + ex.estMinutes > limit) {
+      return;
+    }
+
+    const fitBonus =
+      remaining > 0 ? Math.max(0, 15 - Math.abs(remaining - ex.estMinutes)) : 0;
+    const combined = score + fitBonus;
+
+    if (combined > bestScore) {
+      bestScore = combined;
+      bestIndex = index;
+    }
+  });
+
+  return bestIndex;
 }
 
 type WorkoutResult = {

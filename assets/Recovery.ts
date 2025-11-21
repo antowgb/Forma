@@ -1,11 +1,20 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const RECOVERY_TIME: Record<string, number> = {
-  Chest: 36,
-  Back: 48,
-  Legs: 60,
-  Shoulders: 36,
-  Arms: 30,
+  "Upper Chest": 36,
+  "Lower Chest": 36,
+  "Upper Back": 48,
+  Lats: 48,
+  "Lower Back": 60,
+  Quads: 60,
+  Hamstrings: 60,
+  Calves: 36,
+  "Lateral Deltoid": 36,
+  "Front Deltoid": 36,
+  "Rear Deltoid": 36,
+  Biceps: 30,
+  Triceps: 30,
+  Forearms: 24,
   Core: 24,
 };
 
@@ -124,6 +133,13 @@ export function recoveryRemaining(muscle: string) {
 
   const remainingMs = entry.end - Date.now();
   return Math.max(0, remainingMs / MS_PER_HOUR);
+}
+
+export function getRecoveryRatio(muscle: string) {
+  const remaining = recoveryRemaining(muscle);
+  const required = RECOVERY_TIME[muscle] ?? DEFAULT_RECOVERY;
+  const ratio = 1 - remaining / required;
+  return Math.max(0, Math.min(1, ratio));
 }
 
 export async function markMuscleWorked(
