@@ -8,6 +8,7 @@ export const RECOVERY_TIME: Record<string, number> = {
   "Lower Back": 60,
   Quads: 60,
   Hamstrings: 60,
+  Glutes: 48,
   Calves: 36,
   "Lateral Deltoid": 36,
   "Front Deltoid": 36,
@@ -15,7 +16,7 @@ export const RECOVERY_TIME: Record<string, number> = {
   Biceps: 30,
   Triceps: 30,
   Forearms: 24,
-  Core: 24,
+  Abs: 24,
 };
 
 type RecoveryEntry = {

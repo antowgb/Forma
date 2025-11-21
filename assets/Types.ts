@@ -10,10 +10,11 @@ export type Muscle =
   | "Lateral Deltoid"
   | "Front Deltoid"
   | "Rear Deltoid"
+  | "Glutes"
   | "Biceps"
   | "Triceps"
   | "Forearms"
-  | "Core";
+  | "Abs";
 export type Modality = "weight lifting" | "calisthenics" | "auto";
 export type Equipment = "none" | "basic" | "gym";
 export type WorkoutDuration = 30 | 60 | 90 | 120;

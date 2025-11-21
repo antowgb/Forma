@@ -5,7 +5,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "pushups",
     name: "Push-ups",
-    muscle: "Upper Chest",
+    muscle: "Lower Chest",
     modality: "calisthenics",
     estMinutes: 8,
     intensity: 2,
@@ -189,11 +189,47 @@ export const EXERCISES: Exercise[] = [
   {
     id: "hip_thrust",
     name: "Hip Thrust",
-    muscle: "Hamstrings",
+    muscle: "Glutes",
     modality: "weight lifting",
     estMinutes: 10,
     intensity: 2,
     equipment: "gym",
+  },
+  {
+    id: "step_up",
+    name: "Step-up",
+    muscle: "Glutes",
+    modality: "both",
+    estMinutes: 9,
+    intensity: 2,
+    equipment: "basic",
+  },
+  {
+    id: "bulgarian_split_squat",
+    name: "Bulgarian Split Squat",
+    muscle: "Glutes",
+    modality: "both",
+    estMinutes: 11,
+    intensity: 3,
+    equipment: "basic",
+  },
+  {
+    id: "cable_pull_through",
+    name: "Cable Pull-Through",
+    muscle: "Glutes",
+    modality: "weight lifting",
+    estMinutes: 9,
+    intensity: 2,
+    equipment: "gym",
+  },
+  {
+    id: "glute_bridge",
+    name: "Glute Bridge",
+    muscle: "Glutes",
+    modality: "calisthenics",
+    estMinutes: 8,
+    intensity: 2,
+    equipment: "none",
   },
 
   // CALVES
@@ -214,6 +250,15 @@ export const EXERCISES: Exercise[] = [
     estMinutes: 7,
     intensity: 2,
     equipment: "gym",
+  },
+  {
+    id: "single_leg_calf_raise",
+    name: "Single-Leg Calf Raise",
+    muscle: "Calves",
+    modality: "calisthenics",
+    estMinutes: 6,
+    intensity: 2,
+    equipment: "none",
   },
 
   // SHOULDERS
@@ -300,6 +345,15 @@ export const EXERCISES: Exercise[] = [
     intensity: 1,
     equipment: "gym",
   },
+  {
+    id: "incline_db_curl",
+    name: "Incline Dumbbell Curl",
+    muscle: "Biceps",
+    modality: "weight lifting",
+    estMinutes: 9,
+    intensity: 2,
+    equipment: "gym",
+  },
 
   // TRICEPS
   {
@@ -358,12 +412,21 @@ export const EXERCISES: Exercise[] = [
     intensity: 2,
     equipment: "basic",
   },
+  {
+    id: "reverse_curl",
+    name: "Reverse Curl",
+    muscle: "Forearms",
+    modality: "weight lifting",
+    estMinutes: 8,
+    intensity: 2,
+    equipment: "gym",
+  },
 
-  // CORE
+  // ABS
   {
     id: "plank",
     name: "Plank",
-    muscle: "Core",
+    muscle: "Abs",
     modality: "calisthenics",
     estMinutes: 6,
     intensity: 1,
@@ -372,7 +435,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "hanging_knees",
     name: "Hanging Knee Raises",
-    muscle: "Core",
+    muscle: "Abs",
     modality: "calisthenics",
     estMinutes: 9,
     intensity: 2,
@@ -381,7 +444,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "cable_crunch",
     name: "Cable Crunch",
-    muscle: "Core",
+    muscle: "Abs",
     modality: "weight lifting",
     estMinutes: 8,
     intensity: 2,
@@ -390,7 +453,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "ab_wheel",
     name: "Ab Wheel Rollout",
-    muscle: "Core",
+    muscle: "Abs",
     modality: "calisthenics",
     estMinutes: 8,
     intensity: 2,
@@ -399,7 +462,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "bicycle_crunch",
     name: "Bicycle Crunch",
-    muscle: "Core",
+    muscle: "Abs",
     modality: "calisthenics",
     estMinutes: 6,
     intensity: 1,
@@ -408,7 +471,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "v_ups",
     name: "V-Ups",
-    muscle: "Core",
+    muscle: "Abs",
     modality: "calisthenics",
     estMinutes: 7,
     intensity: 2,
@@ -417,7 +480,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "side_plank",
     name: "Side Plank",
-    muscle: "Core",
+    muscle: "Abs",
     modality: "calisthenics",
     estMinutes: 6,
     intensity: 1,
@@ -437,7 +500,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "kb_swing",
     name: "Kettlebell Swing",
-    muscle: "Hamstrings",
+    muscle: "Glutes",
     modality: "weight lifting",
     estMinutes: 8,
     intensity: 2,
@@ -446,7 +509,7 @@ export const EXERCISES: Exercise[] = [
   {
     id: "russian_twist",
     name: "Russian Twists",
-    muscle: "Core",
+    muscle: "Abs",
     modality: "both",
     estMinutes: 6,
     intensity: 1,

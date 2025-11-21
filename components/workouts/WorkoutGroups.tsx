@@ -22,7 +22,8 @@ const MUSCLE_TO_CLUSTER: Record<string, string> = {
   Biceps: "Arms",
   Triceps: "Arms",
   Forearms: "Arms",
-  Core: "Core",
+  Glutes: "Core",
+  Abs: "Core",
 };
 
 const CLUSTER_ORDER = ["Legs", "Back", "Chest", "Shoulders", "Arms", "Core"];

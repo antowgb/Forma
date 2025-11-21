@@ -8,7 +8,7 @@ const favs = getFavorites();
 export type WorkoutModality = "both" | "weight lifting" | "calisthenics";
 
 export function generateReps(ex: Exercise) {
-  if (ex.muscle === "Core") {
+  if (ex.muscle === "Abs") {
     return "3 x 30 sec";
   }
 
@@ -42,13 +42,14 @@ const MUSCLE_CLUSTERS: Record<string, string> = {
   Quads: "Legs",
   Hamstrings: "Legs",
   Calves: "Legs",
-  "Front Deltoid": "Deltoids",
-  "Lateral Deltoid": "Deltoids",
-  "Rear Deltoid": "Deltoids",
+  Glutes: "Core",
+  "Front Deltoid": "Shoulders",
+  "Lateral Deltoid": "Shoulders",
+  "Rear Deltoid": "Shoulders",
   Biceps: "Arms",
   Triceps: "Arms",
   Forearms: "Arms",
-  Core: "Core",
+  Abs: "Core",
 };
 
 const MAX_CLUSTERS_PER_WORKOUT = 5;

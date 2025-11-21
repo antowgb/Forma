@@ -30,7 +30,8 @@ const MUSCLES = [
   "Biceps",
   "Triceps",
   "Forearms",
-  "Core",
+  "Glutes",
+  "Abs",
 ];
 const CLUSTERS = ["Legs", "Back", "Chest", "Shoulders", "Arms", "Core"] as const;
 type ClusterFilter = (typeof CLUSTERS)[number] | "All";
@@ -46,6 +47,7 @@ type RecoveryInfo = {
 type SortMode = "alpha" | "readySoon";
 function muscleCluster(muscle: string) {
   if (["Quads", "Hamstrings", "Calves"].includes(muscle)) return "Legs";
+  if (muscle === "Glutes") return "Core";
   if (["Upper Back", "Lats", "Lower Back"].includes(muscle)) return "Back";
   if (["Upper Chest", "Lower Chest"].includes(muscle)) return "Chest";
   if (
