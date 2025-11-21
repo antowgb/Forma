@@ -91,7 +91,7 @@ export default function HomeScreen() {
     };
   }, []);
 
-  const simpleGroups = workout.reduce((acc: Record<string, Exercise[]>, ex) => {
+  const groupsByMuscle = workout.reduce((acc: Record<string, Exercise[]>, ex) => {
     (acc[ex.muscle] ||= []).push(ex);
     return acc;
   }, {});
@@ -147,8 +147,8 @@ export default function HomeScreen() {
 
           {notice ? <Text style={styles.notice}>{notice}</Text> : null}
 
-          {/* Workout grouped by muscle */}
-          <WorkoutGroupsList groups={simpleGroups} />
+          {/* Workout grouped by muscle group */}
+          <WorkoutGroupsList groups={groupsByMuscle} />
 
           <RestTimer />
         </View>
